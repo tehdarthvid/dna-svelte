@@ -3,7 +3,7 @@
   export let svelte_ver;
   export let git_ver;
 
-  console.log(pkg_ver + " " + svelte_ver + " " + git_ver);
+  import Deck from "./views/Deck.svelte";
 </script>
 
 <style>
@@ -62,5 +62,6 @@
     </h1>
     <p>[also the target for webdev study]</p>
   </div>
+  <Deck />
   <p>[ svelte v{svelte_ver} ]</p>
 </div>
