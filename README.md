@@ -1,68 +1,15 @@
-*Psst — looking for a shareable component template? Go here --> [sveltejs/component-template](https://github.com/sveltejs/component-template)*
+# dna-vue
 
----
+Personal influence DNA project for webdev study.
 
-# svelte app
+Releases should goto: https://dna.darthvid.com/
 
-This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template.
+0. The [initial version](https://github.com/tehdarthvid/old-dna) was a forced Vue insertion to a basic HTML/CSS/JS site, with the cards derived from [Parallax Depth Cards with Vue.js](https://vuejsexamples.com/parallax-depth-cards-with-vue-js/).
+1. It was then [re-implemented to ReactJS](https://github.com/tehdarthvid/dna-react) for learning React/Redux.
+1. It was then moved back to a full [VueJS/Vuex CLI 2 stable](https://github.com/tehdarthvid/dna-vue-cli-2) setup for comparion with React. This was very shortly moved to [VueJS/Vuex CLI 3 beta](https://github.com/tehdarthvid/dna-vue) for kicks! :)
 
-To create a new project based on this template using [degit](https://github.com/Rich-Harris/degit):
+1. This project... I'll call a 3rd iteration to get my feet wet on Svelte! (^u^)
 
-```bash
-npx degit sveltejs/template svelte-app
-cd svelte-app
-```
+Just playing around to study web development. You'll find the code can get dirty... that's 'coz I'll be tryin' stuff out! It'll get messy, mistakes will be made made, then we figure it out, clean it up, and hopefully we'll end up learning something! (^u^)
 
-*Note that you will need to have [Node.js](https://nodejs.org) installed.*
-
-
-## Get started
-
-Install the dependencies...
-
-```bash
-cd svelte-app
-npm install
-```
-
-...then start [Rollup](https://rollupjs.org):
-
-```bash
-npm run dev
-```
-
-Navigate to [localhost:5000](http://localhost:5000). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
-
-
-## Deploying to the web
-
-### With [now](https://zeit.co/now)
-
-Install `now` if you haven't already:
-
-```bash
-npm install -g now
-```
-
-Then, from within your project folder:
-
-```bash
-now
-```
-
-As an alternative, use the [Now desktop client](https://zeit.co/download) and simply drag the unzipped project folder to the taskbar icon.
-
-### With [surge](https://surge.sh/)
-
-Install `surge` if you haven't already:
-
-```bash
-npm install -g surge
-```
-
-Then, from within your project folder:
-
-```bash
-npm run build
-surge public
-```
+We start with a blank Svelte template via "npx degit sveltejs/template [my-project]" as per [The easiest way to get started with Svelte](https://svelte.dev/blog/the-easiest-way-to-get-started).
