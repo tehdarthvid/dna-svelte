@@ -1,4 +1,4 @@
-# dna-vue
+# dna-svelte
 
 Personal influence DNA project for webdev study.
 
