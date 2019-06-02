@@ -1,61 +1,40 @@
 <script>
-  //import { onMount } from "svelte";
-  import { onDestroy } from "svelte";
+  import { createEventDispatcher } from "svelte";
+  const dispatch = createEventDispatcher();
+
+  import { onMount, onDestroy } from "svelte";
 
   export let title;
   export let bgImageURL;
   export let date;
-  /*
-  let mouseX = 0;
-  let mouseY = 0;
 
-  //let currCard;
-  //let offW;
-*/
   let mX = 0;
   let mY = 0;
-  //$: mY = `(mouseY - {currCard.offsetTop} - {currCard.clientHeight} / 2) /{currCard.clientHeight}`;
-  //$: mX = `(mouseX - {currCard.offsetLeft} - {currCard.clientWidth} / 2) /{currCard.clientWidth}`;
-  //$: mY = `(mouseY - {currCard.offsetTop} - {currCard.clientHeight} / 2) /{currCard.clientHeight}`;
-
   $: rX = mX * 30;
   $: rY = mY * -30;
   $: tX = mX * -40;
   $: tY = mY * -40;
 
-  /*
-  let rX = 0;
-  let rY = 0;
-  let tX = 0;
-  let tY = 0;
-  */
-
+  let isBgImageLoaded = false;
+  let img = new Image();
   let mouseLeaveDelay = null;
 
+  onMount(() => {
+    img.onload = function() {
+      console.log(title + " onMount");
+      isBgImageLoaded = true;
+    };
+    img.src = bgImageURL;
+  });
   onDestroy(() => {
     console.log("the component is being destroyed");
     clearTimeout(mouseLeaveDelay);
   });
 
   function handleMouseMove(e) {
-    //mouseX = e.pageX;
-    //mouseY = e.pageY;
-
-    //console.log(mX);
-
     mX = (e.pageX - this.offsetLeft - this.clientWidth / 2) / this.clientWidth;
     mY = (e.pageY - this.offsetTop - this.clientHeight / 2) / this.clientHeight;
-    /*
-    let mX =
-      (e.pageX - this.offsetLeft - this.clientWidth / 2) / this.clientWidth;
-    let mY =
-      (e.pageY - this.offsetTop - this.clientHeight / 2) / this.clientHeight;
-
-    rX = mX * 30;
-    rY = mY * -30;
-    tX = mX * -40;
-    tY = mY * -40;
-    */
+    //console.log(title + " " + mX);
   }
   function handleMouseEnter(e) {
     clearTimeout(mouseLeaveDelay);
@@ -64,6 +43,10 @@
     mouseLeaveDelay = setTimeout(() => {
       rX = rY = tX = tY = 0;
     }, 1000);
+  }
+  function handleDblClick(e) {
+    console.log(title + " dblclick");
+    dispatch("modal", { url: bgImageURL });
   }
 </script>
 
@@ -118,7 +101,7 @@
     transition: 1s cubic-bezier(0.445, 0.05, 0.55, 0.95);
   }
   .card-bg {
-    opacity: 0.3;
+    opacity: 0;
     position: absolute;
     top: -20px;
     left: -20px;
@@ -133,7 +116,7 @@
     pointer-events: none;
   }
   .card-bg__fade-in {
-    opacity: 0.5;
+    opacity: 0.4;
   }
   .card-info {
     word-break: keep-all;
@@ -187,16 +170,20 @@
     class="card-wrap"
     on:mousemove={handleMouseMove}
     on:mouseenter={handleMouseEnter}
-    on:mouseleave={handleMouseLeave}>
+    on:mouseleave={handleMouseLeave}
+    on:dblclick={handleDblClick}>
     <div class="card" style="transform: rotateY({rX}deg) rotateX({rY}deg)">
+
       <div
-        class="card-bg"
+        class={isBgImageLoaded ? 'card-bg card-bg__fade-in' : 'card-bg'}
         style="transform: translateX({tX}px) translateY({tY}px);
         background-image: url({bgImageURL})" />
+
       <div class="card-info">
         <h1>{title}</h1>
         <p>{date}</p>
       </div>
+
     </div>
   </div>
 </div>
