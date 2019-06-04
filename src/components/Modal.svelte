@@ -5,7 +5,7 @@
 
   export let urlImg;
 
-  console.log("modal " + urlImg);
+  //console.log("modal " + urlImg);
 </script>
 
 <style>

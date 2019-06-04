@@ -21,13 +21,13 @@
 
   onMount(() => {
     img.onload = function() {
-      console.log(title + " onMount");
+      //console.log(title + " onMount");
       isBgImageLoaded = true;
     };
     img.src = bgImageURL;
   });
   onDestroy(() => {
-    console.log("the component is being destroyed");
+    //console.log("the component is being destroyed");
     clearTimeout(mouseLeaveDelay);
   });
 
@@ -45,7 +45,7 @@
     }, 1000);
   }
   function handleDblClick(e) {
-    console.log(title + " dblclick");
+    //console.log(title + " dblclick");
     dispatch("modal", { url: bgImageURL });
   }
 </script>
