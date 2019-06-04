@@ -52,7 +52,7 @@
     <a
       href="https://github.com/tehdarthvid/dna-svelte/releases"
       target="_blank">
-      v{pkg_ver} b{git_ver}
+      v{pkg_ver} {git_ver}
     </a>
   </div>
   <div id="title">

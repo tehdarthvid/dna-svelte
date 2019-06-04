@@ -27,7 +27,8 @@ export default {
         SVELTE_VERSION: execSync("npm info svelte version")
           .toString()
           .trim(),
-        GIT_COMMIT_NUMBER: execSync("git rev-list HEAD --count")
+        //GIT_COMMIT_NUMBER: execSync("git rev-list HEAD --count")
+        GIT_COMMIT_NUMBER: execSync("git log --pretty=format:'%h' -n 1")
           .toString()
           .trim()
       }
