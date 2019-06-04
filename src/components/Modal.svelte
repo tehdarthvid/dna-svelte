@@ -40,10 +40,16 @@
   }
 </style>
 
+<svelte:window
+  on:keydown={e => {
+    if (27 === e.keyCode) {
+      dispatch('close');
+    }
+  }} />
 <div class="modal" on:click={() => dispatch('close')}>
   <div class="lazy-img-wrapper">
 
-    <img src={urlImg} />
+    <img src={urlImg} alt="" />
 
   </div>
 </div>
