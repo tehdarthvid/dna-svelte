@@ -31,12 +31,7 @@
     </div>
   {/if}
   {#if urlModal}
-    <Modal on:close={() => (urlModal = '')}>
-      <img
-        style="max-width: auto; height: 100%; max-height: 95vh;"
-        src={urlModal} />
-
-    </Modal>
+    <Modal on:close={() => (urlModal = '')} urlImg={urlModal} />
   {/if}
 
 </div>

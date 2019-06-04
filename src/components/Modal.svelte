@@ -2,37 +2,48 @@
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
+
+  export let urlImg;
+
+  console.log("modal " + urlImg);
 </script>
 
 <style>
-  .modal-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
+  .lazy-img-wrapper {
     height: 100%;
-    background: rgba(0, 0, 0, 0.3);
+    width: auto;
+    position: relative;
   }
-
   .modal {
+    z-index: 1;
+
+    background-color: rgba(0, 0, 0, 0.61);
+
+    position: fixed;
+
+    height: 100%;
+    width: 100%;
+
+    left: 0;
+    top: 0;
+  }
+  img {
+    box-shadow: rgba(250, 250, 250, 0.66) 0 30px 60px 0;
+    max-height: 90%;
+    max-width: 90%;
+    object-fit: contain;
+
     position: absolute;
-    left: 50%;
     top: 50%;
-    width: calc(100vw - 4em);
-    max-width: 32em;
-    max-height: calc(100vh - 4em);
-    overflow: auto;
+    left: 50%;
     transform: translate(-50%, -50%);
-    padding: 1em;
-    border-radius: 0.2em;
-    background: white;
   }
 </style>
 
-<div class="modal-background" on:click={() => dispatch('close')} />
+<div class="modal" on:click={() => dispatch('close')}>
+  <div class="lazy-img-wrapper">
 
-<div class="modal">
-  <hr />
-  <slot />
-  <hr />
+    <img src={urlImg} />
+
+  </div>
 </div>
