@@ -8,7 +8,8 @@
 
 <style>
   #app {
-    font-family: "Avenir", Helvetica, Arial, sans-serif;
+    font-family: "Ubuntu", "Noto Sans JP", "Avenir", Helvetica, Arial,
+      sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
@@ -62,8 +63,8 @@
   </div>
   <div id="title">
     <h1>
-      <a href="https://twitter.com/darthvid" target="_blank">darthvid</a>
-      's influences DNA
+      <a href="https://twitter.com/darthvid" target="_blank">darthvid's</a>
+      influences DNA
     </h1>
     <p>[also the target for webdev study]</p>
   </div>
