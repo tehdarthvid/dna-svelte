@@ -1,6 +1,6 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-  const dispatch = createEventDispatcher();
+  import { log } from "../utils/logger.js";
+  import { activeCard, deck } from "../stores/deckStore.js";
 
   import { onMount, onDestroy } from "svelte";
 
@@ -46,7 +46,8 @@
   }
   function handleDblClick(e) {
     //console.log(title + " dblclick");
-    dispatch("modal", { url: bgImageURL });
+    let ac = { title: title, bgImageURL: bgImageURL, date: date };
+    activeCard.set(ac);
   }
 </script>
 
