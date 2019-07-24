@@ -10,7 +10,7 @@
     "rollup-plugin-svelte": "^5.1.0",
     "rollup-plugin-terser": "^5.1.1",
     "sirv-cli": "^0.4.4",
-    "svelte": "^3.6.7",
+    "svelte": "^3.6.8",
     "ws": ">=3.3.1"
   },
   "scripts": {
@@ -21,9 +21,8 @@
     "start:dev": "sirv public --dev"
   },
   "dependencies": {
-    "eslint": "^6.0.0",
+    "eslint": "^6.1.0",
     "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-replace": "^2.2.0",
-    "ws": ">=3.3.1"
+    "rollup-plugin-replace": "^2.2.0"
   }
 }
