@@ -2,8 +2,14 @@
   export let pkg_ver;
   export let svelte_ver;
   export let git_ver;
+  //export let ga_tracking_id;
+
+  import { googleAnalytics } from "./utils/google-analytics.js";
 
   import Deck from "./views/Deck.svelte";
+
+  if (process.env.gaID) googleAnalytics(process.env.gaID);
+  console.log("yoyoyo: " + process.env.gaID);
 </script>
 
 <style>
