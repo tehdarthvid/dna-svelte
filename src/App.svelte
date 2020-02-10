@@ -58,7 +58,7 @@
     <a
       href="https://github.com/tehdarthvid/dna-svelte/commits/master"
       target="_blank">
-       {git_ver}
+      {git_ver}
     </a>
   </div>
   <div id="title">
