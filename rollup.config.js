@@ -21,17 +21,18 @@ export default {
   },
   plugins: [
     replace({
-      delimiters: ["<@", "@>"],
-      values: {
-        PKG_VERSION: version,
-        SVELTE_VERSION: execSync("npm info svelte version")
-          .toString()
-          .trim(),
-        //GIT_COMMIT_NUMBER: execSync("git rev-list HEAD --count")
-        GIT_COMMIT_NUMBER: execSync("git log --pretty=format:'%h' -n 1")
-          .toString()
-          .trim()
-      }
+      process: JSON.stringify({
+        env: {
+          pkg_ver: version,
+          svelte_ver: execSync("npm info svelte version")
+            .toString()
+            .trim(),
+          git_hash: execSync("git log --pretty=format:'%h' -n 1")
+            .toString()
+            .trim(),
+          gaID: process.env.GA_TRACKING_ID
+        }
+      })
     }),
     json(),
     svelte({
