@@ -34,8 +34,8 @@ jobs:
 
       - name: Setup Firebase project
         run: |
-          firebase use --add ${{ secrets.FIREBASE_PROJECT_ID }} --token "${{ secrets.FIREBASE_TOKEN }}"
+          node_modules/.bin/firebase use --add ${{ secrets.FIREBASE_PROJECT_ID }} --token "${{ secrets.FIREBASE_TOKEN }}"
 
       - name: Deploy "public" folder to Firebase Hosting
         run: |
-          firebase deploy --only hosting --token "${{ secrets.FIREBASE_TOKEN }}"
+          node_modules/.bin/firebase deploy --only hosting --token "${{ secrets.FIREBASE_TOKEN }}"
