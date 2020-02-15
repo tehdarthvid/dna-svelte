@@ -1,5 +1,7 @@
 # dna-svelte
 
+![Build and Deploy](https://github.com/tehdarthvid/dna-svelte/workflows/Build%20and%20Deploy/badge.svg)
+
 Personal influence DNA project for webdev study.
 
 Releases should goto: https://dna.darthvid.com/
