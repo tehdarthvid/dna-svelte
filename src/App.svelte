@@ -1,7 +1,7 @@
 <script>
   export let pkg_ver;
   export let svelte_ver;
-  export let git_ver;
+  //export let git_ver;
   //export let ga_tracking_id;
 
   import { googleAnalytics } from "./utils/google-analytics.js";
@@ -9,7 +9,8 @@
   import Deck from "./views/Deck.svelte";
 
   if (process.env.gaID) googleAnalytics(process.env.gaID);
-  //console.log("yoyoyo: " + process.env.gaID);
+  var strGitHash = process.env.git_hash;
+  strGitHash = strGitHash.slice(0, 7);
 </script>
 
 <style>
@@ -64,7 +65,7 @@
     <a
       href="https://github.com/tehdarthvid/dna-svelte/commits/master"
       target="_blank">
-      {git_ver}
+      {strGitHash}
     </a>
   </div>
   <div id="title">
