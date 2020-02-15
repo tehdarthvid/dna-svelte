@@ -30,11 +30,10 @@ jobs:
 
       - name: Install Firebase-CLI
         run: |
-          npm install firebase-tools
+          sudo npm install -g firebase-tools
 
       - name: Setup Firebase project
         run: |
-          export PATH="./node_modules/.bin:$PATH/"
           firebase use --add ${{ secrets.FIREBASE_PROJECT_ID }} --token "${{ secrets.FIREBASE_TOKEN }}"
 
       - name: Deploy "public" folder to Firebase Hosting
