@@ -9,7 +9,7 @@
   import Deck from "./views/Deck.svelte";
 
   if (process.env.gaID) googleAnalytics(process.env.gaID);
-  console.log("yoyoyo: " + process.env.gaID);
+  //console.log("yoyoyo: " + process.env.gaID);
 </script>
 
 <style>
