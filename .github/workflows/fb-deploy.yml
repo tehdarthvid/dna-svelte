@@ -31,11 +31,12 @@ jobs:
       - name: Install Firebase-CLI
         run: |
           npm install firebase-tools
+          export PATH="./node_modules/.bin:$PATH/"
 
       - name: Setup Firebase project
         run: |
-          node_modules/.bin/firebase use --add ${{ secrets.FIREBASE_PROJECT_ID }} --token "${{ secrets.FIREBASE_TOKEN }}"
+          firebase use --add ${{ secrets.FIREBASE_PROJECT_ID }} --token "${{ secrets.FIREBASE_TOKEN }}"
 
       - name: Deploy "public" folder to Firebase Hosting
         run: |
-          node_modules/.bin/firebase deploy --only hosting --token "${{ secrets.FIREBASE_TOKEN }}"
+          firebase deploy --only hosting --token "${{ secrets.FIREBASE_TOKEN }}"
