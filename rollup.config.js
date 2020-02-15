@@ -27,9 +27,7 @@ export default {
           svelte_ver: execSync("npm info svelte version")
             .toString()
             .trim(),
-          git_hash: execSync("git log --pretty=format:'%h' -n 1")
-            .toString()
-            .trim(),
+          git_hash: process.env.GITHUB_SHA,
           gaID: process.env.GA_TRACKING_ID
         }
       })

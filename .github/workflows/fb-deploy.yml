@@ -1,0 +1,41 @@
+name: Build and Deploy
+
+# Ensure the following 4 items are defined/updated:
+#   1. runner env FIREBASE_TOKEN: Firebase Token
+#   2. runner env FIREBASE_PROJECT_ID: Firebase Project to deploy to
+#   3. runner env GA_TRACKING_ID: Google Analytics tracking ID
+
+#   4. Update source branch and other trigger filters.
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "**"
+      - "!README.md"
+
+jobs:
+  fb-deploy-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check-out ${{ github.ref }}
+        uses: actions/checkout@v2
+
+      - name: Build ${{ github.ref }}
+        env:
+          GA_TRACKING_ID: ${{ secrets.GA_TRACKING_ID }}
+        run: |
+          npm install
+          npm run build
+
+      - name: Install Firebase-CLI
+        run: |
+          npm install -g firebase-tools
+
+      - name: Setup Firebase project
+        run: |
+          firebase use --add ${{ secrets.FIREBASE_PROJECT_ID }} --token "${{ secrets.FIREBASE_TOKEN }}"
+
+      - name: Deploy "public" folder to Firebase Hosting
+        run: |
+          firebase deploy --only hosting --token "${{ secrets.FIREBASE_TOKEN }}"
