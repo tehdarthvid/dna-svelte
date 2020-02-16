@@ -11,6 +11,16 @@ const { execSync } = require("child_process");
 
 const production = !process.env.ROLLUP_WATCH;
 
+if (null == process.env.URL_DECK) {
+  throw new Error("Missing environment variable `URL_DECK`");
+}
+if (null == process.env.GITHUB_SHA) {
+  throw new Error("Missing environment variable `GITHUB_SHA`");
+}
+if (null == process.env.GA_TRACKING_ID) {
+  throw new Error("Missing environment variable `GA_TRACKING_ID`");
+}
+
 export default {
   input: "src/main.js",
   output: {
@@ -28,7 +38,8 @@ export default {
             .toString()
             .trim(),
           git_hash: process.env.GITHUB_SHA,
-          gaID: process.env.GA_TRACKING_ID
+          gaID: process.env.GA_TRACKING_ID,
+          url_deck: process.env.URL_DECK
         }
       })
     }),
