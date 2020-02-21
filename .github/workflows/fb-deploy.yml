@@ -13,6 +13,8 @@ on:
     paths:
       - "**"
       - "!README.md"
+      - "!.gitignore"
+      - "!.gitattributes"
 
 jobs:
   fb-deploy-job:
