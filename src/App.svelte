@@ -71,6 +71,7 @@
       <a href="https://twitter.com/darthvid" target="_blank">darthvid's</a>
       influences DNA
     </h1>
+    <p>Key interests influenced my life.</p>
     <p>[also the target for webdev study]</p>
   </div>
   <Deck />
