@@ -1,2 +1,8 @@
-public/* linguist-detectable=false
+* text=auto
+*.html linguist-vendored
+*.css linguist-vendored
+*.json linguist-vendored
+*.md linguist-vendored
+.gitignore linguist-vendored
+.gitattributes linguist-vendored
 public/* linguist-vendored
