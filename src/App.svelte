@@ -68,7 +68,7 @@
   </div>
   <div id="title">
     <h1>
-      <a href="https://twitter.com/darthvid" target="_blank">darthvid's</a>
+      <a href="https://darthvid.com" target="_blank">darthvid's</a>
       influences DNA
     </h1>
     <p>Key interests influenced my life.</p>
