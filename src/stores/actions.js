@@ -3,6 +3,7 @@ export default function initDeck(set) {
   fetch(urly)
     .then(res => res.json())
     .then(data => {
+      //set([]);
       set(data);
     });
 }
