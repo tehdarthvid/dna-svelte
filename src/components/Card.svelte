@@ -2,7 +2,7 @@
   import { log } from "../utils/logger.js";
   import { activeCard, deck } from "../stores/deckStore.js";
 
-  import { onMount, onDestroy } from "svelte";
+  import { onMount, onDestroy, afterUpdate } from "svelte";
 
   export let title;
   export let bgImageURL;
@@ -19,12 +19,17 @@
   let img = new Image();
   let mouseLeaveDelay = null;
 
-  onMount(() => {
-    img.onload = function() {
+  //onMount(() => {
+  afterUpdate(() => {
+    if (bgImageURL) {
+      img.onload = function() {
+        //console.log(title + " onLoad");
+        isBgImageLoaded = true;
+      };
+
       //console.log(title + " onMount");
-      isBgImageLoaded = true;
-    };
-    img.src = bgImageURL;
+      img.src = bgImageURL;
+    }
   });
   onDestroy(() => {
     //console.log("the component is being destroyed");
@@ -181,8 +186,8 @@
         background-image: url({bgImageURL})" />
 
       <div class="card-info">
-        <h1>{title}</h1>
-        <p>{date}</p>
+        <h1>{title ? title : ''}</h1>
+        <p>{date ? date : ''}</p>
       </div>
 
     </div>
