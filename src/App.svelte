@@ -56,7 +56,7 @@
 <div id="app">
   <div id="version">
     <a
-      href="https://github.com/tehdarthvid/dna-svelte/releases"
+      href="https://github.com/tehdarthvid/dna-svelte/blob/master/CHANGELOG.md"
       target="_blank">
       v{pkg_ver}
     </a>
