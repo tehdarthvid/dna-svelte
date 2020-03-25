@@ -15,6 +15,7 @@ on:
       - "!README.md"
       - "!.gitignore"
       - "!.gitattributes"
+      - "!CHANGELOG.md"
 
 jobs:
   fb-deploy-job:
