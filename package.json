@@ -15,12 +15,14 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "start": "sirv public",
-    "predeploy": "npm run build"
+    "predeploy": "npm run build",
+    "version": "auto-changelog -p && git add CHANGELOG.md"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
     "@rollup/plugin-replace": "^2.3.1",
+    "auto-changelog": "^1.16.2",
     "rollup": "^2.1.0",
     "rollup-plugin-livereload": "^1.1.0",
     "rollup-plugin-svelte": "^5.1.1",
