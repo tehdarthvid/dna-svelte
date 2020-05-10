@@ -2,11 +2,9 @@
   import { log } from "../utils/logger.js";
   import { activeCard, deck } from "../stores/deckStore.js";
 
-  import { onMount, onDestroy, afterUpdate } from "svelte";
+  import { onDestroy, afterUpdate } from "svelte";
 
-  export let title;
-  export let bgImageURL;
-  export let date;
+  export let params;
 
   let mX = 0;
   let mY = 0;
@@ -16,26 +14,35 @@
   $: tY = mY * -40;
 
   let isBgImageLoaded = false;
-  let img = new Image();
+  let img = null;
   let mouseLeaveDelay = null;
 
-  //onMount(() => {
-  afterUpdate(() => {
-    if (bgImageURL) {
-      img.onload = function() {
-        //console.log(title + " onLoad");
-        isBgImageLoaded = true;
-      };
+  /*
+   * Svelte lifecycle handlers
+   */
 
-      //console.log(title + " onMount");
-      img.src = bgImageURL;
+  afterUpdate(() => {
+    if (!params.vidURL && !isBgImageLoaded && params.imgURL) {
+      img = new Image();
+      img.onload = handleImageLoaded;
+      img.src = params.imgURL;
     }
+    //console.log("afterUpdate: " + params.title);
   });
   onDestroy(() => {
     //console.log("the component is being destroyed");
     clearTimeout(mouseLeaveDelay);
   });
 
+  /*
+   * event handlers
+   */
+
+  // The behaviour changes if this is not an anonymous function.
+  const handleImageLoaded = () => {
+    // console.log(params.title);
+    isBgImageLoaded = true;
+  };
   function handleMouseMove(e) {
     mX = (e.pageX - this.offsetLeft - this.clientWidth / 2) / this.clientWidth;
     mY = (e.pageY - this.offsetTop - this.clientHeight / 2) / this.clientHeight;
@@ -50,13 +57,29 @@
     }, 1000);
   }
   function handleDblClick(e) {
-    //console.log(title + " dblclick");
-    let ac = { title: title, bgImageURL: bgImageURL, date: date };
+    console.log(params.title + " dblclick");
+    let ac = {
+      title: params.title,
+      imgURL: params.imgURL,
+      date: params.date
+    };
     activeCard.set(ac);
+    // window.open(params.url, "_blank");
   }
 </script>
 
 <style scoped>
+  p {
+    font-size: 16px;
+  }
+  h1 + p,
+  p + p {
+    margin-top: 10px;
+  }
+  * {
+    -webkit-margin-before: 0px;
+    -webkit-margin-after: 0px;
+  }
   .card-wrap {
     width: 240px;
     height: 320px;
@@ -96,6 +119,7 @@
   }
   .card {
     position: relative;
+    text-align: center;
     flex: 0 0 240px;
     width: 100%;
     height: 100%;
@@ -169,27 +193,67 @@
     transform: translateY(100%);
     transition: 5s 1s cubic-bezier(0.445, 0.05, 0.55, 0.95);
   }
+
+  /* 
+   * Center the video inside the card like the image verison. 
+   * Otherwise, everything else rely on `card-bg`.
+   */
+  .center_video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 </style>
 
-<div>
-  <div
-    class="card-wrap"
-    on:mousemove={handleMouseMove}
-    on:mouseenter={handleMouseEnter}
-    on:mouseleave={handleMouseLeave}
-    on:dblclick={handleDblClick}>
-    <div class="card" style="transform: rotateY({rX}deg) rotateX({rY}deg)">
+<div
+  class="card-wrap"
+  on:mousemove={handleMouseMove}
+  on:mouseenter={handleMouseEnter}
+  on:mouseleave={handleMouseLeave}
+  on:dblclick={handleDblClick}>
 
+  <div class="card" style="transform: rotateY({rX}deg) rotateX({rY}deg)">
+    {#if null != params.ytVideoID}
+      <div
+        class={isBgImageLoaded ? 'card-bg card-bg__fade-in' : 'card-bg card-bg__fade-in'}
+        style="transform: translateX({tX}px) translateY({tY}px); ">
+        <iframe
+          title={params.title ? params.title : ''}
+          class="center_video"
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/{params.ytVideoID}?rel=0&amp;controls=0&amp;autoplay=1&amp;mute=1&amp;loop=1&amp;playlist={params.ytVideoID}"
+          frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope;
+          picture-in-picture"
+          loop="1"
+          allowfullscreen
+          onStateChange={handleImageLoaded} />
+      </div>
+    {:else if null != params.vidURL}
+      <div
+        class={isBgImageLoaded ? 'card-bg card-bg__fade-in' : 'card-bg'}
+        style="transform: translateX({tX}px) translateY({tY}px); ">
+        <video
+          class="center_video"
+          src={params.vidURL}
+          autoplay="true"
+          loop="true"
+          muted="true"
+          on:playing={handleImageLoaded} />
+      </div>
+    {:else if null != params.imgURL}
       <div
         class={isBgImageLoaded ? 'card-bg card-bg__fade-in' : 'card-bg'}
         style="transform: translateX({tX}px) translateY({tY}px);
-        background-image: url({bgImageURL})" />
+        background-image: url({params.imgURL})" />
+    {/if}
 
-      <div class="card-info">
-        <h1>{title ? title : ''}</h1>
-        <p>{date ? date : ''}</p>
-      </div>
-
+    <div class="card-info">
+      <h1>{params.title ? params.title : ''}</h1>
+      <p>{params.date ? params.date : ''}</p>
     </div>
+
   </div>
 </div>

@@ -34,12 +34,12 @@
   {:else}
     <div class="container">
       {#each $deck as card}
-        <Card on:modal={handleModal} {...card} />
+        <Card on:modal={handleModal} params={{ ...card }} />
       {/each}
     </div>
   {/if}
   {#if currCard}
-    <Modal on:close={() => (currCard = null)} urlImg={currCard.bgImageURL} />
+    <Modal on:close={() => (currCard = null)} urlImg={currCard.imgURL} />
   {/if}
 
 </div>
