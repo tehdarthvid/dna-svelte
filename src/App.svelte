@@ -1,14 +1,12 @@
 <script>
-  export let pkg_ver;
-  export let svelte_ver;
+  let { pkg_ver, svelte_ver } = $props();
 
   import { googleAnalytics } from "./utils/google-analytics.js";
 
   import Deck from "./views/Deck.svelte";
 
   if (process.env.gaID) googleAnalytics(process.env.gaID);
-  var strGitHash = process.env.git_hash;
-  strGitHash = strGitHash.slice(0, 7);
+  const strGitHash = process.env.git_hash.slice(0, 7);
 </script>
 
 <style>

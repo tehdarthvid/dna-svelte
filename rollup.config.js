@@ -2,14 +2,17 @@ import svelte from "rollup-plugin-svelte";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import livereload from "rollup-plugin-livereload";
-import { terser } from "rollup-plugin-terser";
+import terser from "@rollup/plugin-terser";
+import css from "rollup-plugin-css-only";
 
 import replace from "@rollup/plugin-replace";
 
 //import json from "rollup-plugin-json";
 //import replace from "rollup-plugin-replace";
-import { version } from "./package.json";
-const { execSync } = require("child_process");
+import { readFileSync } from "fs";
+import { execSync, spawn } from "child_process";
+
+const { version } = JSON.parse(readFileSync("./package.json", "utf8"));
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -33,27 +36,29 @@ export default {
   },
   plugins: [
     replace({
-      process: JSON.stringify({
-        env: {
-          pkg_ver: version,
-          svelte_ver: execSync("npm info svelte version")
+      preventAssignment: true,
+      // default delimiters skip keys followed by "." (e.g. `process.env.git_hash.slice`)
+      delimiters: ["\\b", "\\b"],
+      values: {
+        "process.env.pkg_ver": JSON.stringify(version),
+        "process.env.svelte_ver": JSON.stringify(
+          execSync("npm info svelte version")
             .toString()
-            .trim(),
-          git_hash: process.env.GITHUB_SHA,
-          gaID: process.env.GA_TRACKING_ID,
-          url_deck: process.env.URL_DECK
-        }
-      })
-    }),
-    svelte({
-      // enable run-time checks when not in production
-      dev: !production,
-      // we'll extract any component CSS out into
-      // a separate file - better for performance
-      css: css => {
-        css.write("public/build/bundle.css");
+            .trim()
+        ),
+        "process.env.git_hash": JSON.stringify(process.env.GITHUB_SHA),
+        "process.env.gaID": JSON.stringify(process.env.GA_TRACKING_ID),
+        "process.env.url_deck": JSON.stringify(process.env.URL_DECK)
       }
     }),
+    svelte({
+      compilerOptions: {
+        // enable run-time checks when not in production
+        dev: !production
+      }
+    }),
+    // extract component CSS into a separate file
+    css({ output: "bundle.css" }),
 
     // If you have external dependencies installed from
     // npm, you'll most likely need these plugins. In
@@ -91,7 +96,7 @@ function serve() {
       if (!started) {
         started = true;
 
-        require("child_process").spawn("npm", ["run", "start", "--", "--dev"], {
+        spawn("npm", ["run", "start", "--", "--dev"], {
           stdio: ["ignore", "inherit", "inherit"],
           shell: true
         });
