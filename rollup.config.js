@@ -4,10 +4,10 @@ import commonjs from "@rollup/plugin-commonjs";
 import livereload from "rollup-plugin-livereload";
 import terser from "@rollup/plugin-terser";
 import css from "rollup-plugin-css-only";
+import json from "@rollup/plugin-json";
 
 import replace from "@rollup/plugin-replace";
 
-//import json from "rollup-plugin-json";
 //import replace from "rollup-plugin-replace";
 import { readFileSync } from "fs";
 import { execSync, spawn } from "child_process";
@@ -16,9 +16,6 @@ const { version } = JSON.parse(readFileSync("./package.json", "utf8"));
 
 const production = !process.env.ROLLUP_WATCH;
 
-if (null == process.env.URL_DECK) {
-  throw new Error("Missing environment variable `URL_DECK`");
-}
 if (null == process.env.GITHUB_SHA) {
   throw new Error("Missing environment variable `GITHUB_SHA`");
 }
@@ -47,10 +44,10 @@ export default {
             .trim()
         ),
         "process.env.git_hash": JSON.stringify(process.env.GITHUB_SHA),
-        "process.env.gaID": JSON.stringify(process.env.GA_TRACKING_ID),
-        "process.env.url_deck": JSON.stringify(process.env.URL_DECK)
+        "process.env.gaID": JSON.stringify(process.env.GA_TRACKING_ID)
       }
     }),
+    json(),
     svelte({
       compilerOptions: {
         // enable run-time checks when not in production
