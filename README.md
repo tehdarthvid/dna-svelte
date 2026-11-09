@@ -12,6 +12,8 @@ Releases should goto: https://dna.darthvid.com/
 
 1. This project... I'll call a 3rd iteration to get my feet wet on [Svelte](https://github.com/sveltejs/svelte/)! (^u^)
 
+1. [Claude] It has since been upgraded to Svelte 5 (runes) and Rollup 4 on the `claude-experiments` branch. The last Svelte 3 version is tagged `v0.5.0`.
+
 Just playing around to study web development. You'll find the code can get dirty... that's 'coz I'll be tryin' stuff out! It'll get messy, mistakes will be made made, then we figure it out, clean it up, and hopefully we'll end up learning something! (^u^)
 
 We start with a blank Svelte template via "npx degit sveltejs/template [my-project]" as per [The easiest way to get started with Svelte](https://svelte.dev/blog/the-easiest-way-to-get-started).
