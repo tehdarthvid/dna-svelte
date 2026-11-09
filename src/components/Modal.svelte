@@ -1,11 +1,5 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-
-  const dispatch = createEventDispatcher();
-
-  export let urlImg;
-
-  //console.log("modal " + urlImg);
+  let { urlImg, onclose } = $props();
 </script>
 
 <style>
@@ -41,12 +35,13 @@
 </style>
 
 <svelte:window
-  on:keydown={e => {
-    if (27 === e.keyCode) {
-      dispatch('close');
+  onkeydown={e => {
+    if ('Escape' === e.key) {
+      onclose?.();
     }
   }} />
-<div class="modal" on:click={() => dispatch('close')}>
+<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+<div class="modal" onclick={() => onclose?.()}>
   <div class="lazy-img-wrapper">
 
     <img src={urlImg} alt="" />

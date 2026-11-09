@@ -1,79 +1,125 @@
 <script>
-  import { log } from "../utils/logger.js";
-  import { activeCard, deck } from "../stores/deckStore.js";
+  import { activeCard } from "../stores/deckStore.js";
 
-  import { onDestroy, afterUpdate } from "svelte";
+  let { params } = $props();
 
-  export let params;
+  let mX = $state(0);
+  let mY = $state(0);
+  const rX = $derived(mX * 30);
+  const rY = $derived(mY * -30);
+  const tX = $derived(mX * -40);
+  const tY = $derived(mY * -40);
 
-  let mX = 0;
-  let mY = 0;
-  $: rX = mX * 30;
-  $: rY = mY * -30;
-  $: tX = mX * -40;
-  $: tY = mY * -40;
-
-  let isBgImageLoaded = false;
-  let img = null;
+  let isBgImageLoaded = $state(false);
   let mouseLeaveDelay = null;
 
   /*
    * Svelte lifecycle handlers
    */
 
-  afterUpdate(() => {
+  $effect(() => {
     if (!params.vidURL && !isBgImageLoaded && params.imgURL) {
-      img = new Image();
+      const img = new Image();
       img.onload = handleImageLoaded;
       img.src = params.imgURL;
     }
-    //console.log("afterUpdate: " + params.title);
   });
-  onDestroy(() => {
-    //console.log("the component is being destroyed");
-    clearTimeout(mouseLeaveDelay);
-  });
+  $effect(() => () => clearTimeout(mouseLeaveDelay));
 
   /*
    * event handlers
    */
 
-  // The behaviour changes if this is not an anonymous function.
   const handleImageLoaded = () => {
     // console.log(params.title);
     isBgImageLoaded = true;
   };
   function handleMouseMove(e) {
-    mX = (e.pageX - this.offsetLeft - this.clientWidth / 2) / this.clientWidth;
-    mY = (e.pageY - this.offsetTop - this.clientHeight / 2) / this.clientHeight;
-    //console.log(title + " " + mX);
+    const el = e.currentTarget;
+    mX = (e.pageX - el.offsetLeft - el.clientWidth / 2) / el.clientWidth;
+    mY = (e.pageY - el.offsetTop - el.clientHeight / 2) / el.clientHeight;
   }
   function handleMouseEnter(e) {
     clearTimeout(mouseLeaveDelay);
   }
   function handleMouseLeave(e) {
     mouseLeaveDelay = setTimeout(() => {
-      rX = rY = tX = tY = 0;
+      mX = mY = 0;
     }, 1000);
   }
   function handleDblClick(e) {
-    console.log(params.title + " dblclick");
-    let ac = {
+    activeCard.set({
       title: params.title,
       imgURL: params.imgURL,
       date: params.date
-    };
-    activeCard.set(ac);
-    // window.open(params.url, "_blank");
+    });
   }
 </script>
 
+<div
+  role="img"
+  aria-label={params.title ? params.title : ''}
+  class="card-wrap"
+  onmousemove={handleMouseMove}
+  onmouseenter={handleMouseEnter}
+  onmouseleave={handleMouseLeave}
+  ondblclick={handleDblClick}
+>
+  <div class="card" style="transform: rotateY({rX}deg) rotateX({rY}deg)">
+    {#if null != params.ytVideoID}
+      <div
+        class="card-bg card-bg__fade-in"
+        style="transform: translateX({tX}px) translateY({tY}px); "
+      >
+        <iframe
+          title={params.title ? params.title : ''}
+          class="center_video"
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/{params.ytVideoID}?rel=0&controls=0&autoplay=1&mute=1&loop=1&playlist={params.ytVideoID}"
+          frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope;
+          picture-in-picture"
+          loop="1"
+          allowfullscreen
+        >
+        </iframe>
+      </div>
+    {:else if null != params.vidURL}
+      <div
+        class={isBgImageLoaded ? 'card-bg card-bg__fade-in' : 'card-bg'}
+        style="transform: translateX({tX}px) translateY({tY}px); "
+      >
+        <video
+          class="center_video"
+          src={params.vidURL}
+          autoplay="true"
+          loop="true"
+          muted="true"
+          onplaying={handleImageLoaded}
+        >
+        </video>
+      </div>
+    {:else if null != params.imgURL}
+      <div
+        class={isBgImageLoaded ? 'card-bg card-bg__fade-in' : 'card-bg'}
+        style="transform: translateX({tX}px) translateY({tY}px);
+        background-image: url({params.imgURL})"
+      ></div>
+    {/if}
+
+    <div class="card-info">
+      <h1>{params.title ? params.title : ''}</h1>
+      <p>{params.date ? params.date : ''}</p>
+    </div>
+  </div>
+</div>
+
 <style scoped>
   p {
-    font-size: 16px;
+    font-size: 0.618em;
   }
-  h1 + p,
-  p + p {
+  h1 + p {
     margin-top: 10px;
   }
   * {
@@ -106,16 +152,21 @@
     transform: translateY(0);
   }
   .card-wrap:hover .card-bg {
-    transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+    transition:
+      0.6s cubic-bezier(0.23, 1, 0.32, 1),
       opacity 1s cubic-bezier(0.445, 0.05, 0.55, 0.95);
     opacity: 0.9;
   }
   .card-wrap:hover .card {
-    transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+    transition:
+      0.6s cubic-bezier(0.23, 1, 0.32, 1),
       box-shadow 2s cubic-bezier(0.23, 1, 0.32, 1);
-    box-shadow: rgba(255, 255, 255, 0.2) 0 0 40px 5px,
-      rgba(255, 255, 255, 1) 0 0 0 1px, rgba(0, 0, 0, 0.66) 0 30px 60px 0,
-      inset #333 0 0 0 5px, inset white 0 0 0 6px;
+    box-shadow:
+      rgba(255, 255, 255, 0.2) 0 0 40px 5px,
+      rgba(255, 255, 255, 1) 0 0 0 1px,
+      rgba(0, 0, 0, 0.66) 0 30px 60px 0,
+      inset #333 0 0 0 5px,
+      inset white 0 0 0 6px;
   }
   .card {
     position: relative;
@@ -126,7 +177,9 @@
     background-color: #333;
     overflow: hidden;
     border-radius: 5px;
-    box-shadow: rgba(0, 0, 0, 0.66) 0 30px 60px 0, inset #333 0 0 0 5px,
+    box-shadow:
+      rgba(0, 0, 0, 0.66) 0 30px 60px 0,
+      inset #333 0 0 0 5px,
       inset rgba(255, 255, 255, 0.5) 0 0 0 6px;
     transition: 1s cubic-bezier(0.445, 0.05, 0.55, 0.95);
   }
@@ -141,7 +194,8 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    transition: 1s cubic-bezier(0.445, 0.05, 0.55, 0.95),
+    transition:
+      1s cubic-bezier(0.445, 0.05, 0.55, 0.95),
       opacity 2s 1s cubic-bezier(0.445, 0.05, 0.55, 0.95);
     pointer-events: none;
   }
@@ -160,7 +214,7 @@
     width: 100%;
   }
   .card-info h1 {
-    font-size: 24px;
+    font-size: 1em;
     font-weight: 700;
     text-shadow: rgba(0, 0, 0, 0.5) 0 10px 10px;
     opacity: 0.4;
@@ -176,18 +230,14 @@
     z-index: 1;
   }
   .card-info:after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
     z-index: 0;
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      rgba(0, 0, 0, 0.6) 100%
-    );
+    background-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
     background-blend-mode: overlay;
     opacity: 0;
     transform: translateY(100%);
@@ -205,55 +255,3 @@
     transform: translate(-50%, -50%);
   }
 </style>
-
-<div
-  class="card-wrap"
-  on:mousemove={handleMouseMove}
-  on:mouseenter={handleMouseEnter}
-  on:mouseleave={handleMouseLeave}
-  on:dblclick={handleDblClick}>
-
-  <div class="card" style="transform: rotateY({rX}deg) rotateX({rY}deg)">
-    {#if null != params.ytVideoID}
-      <div
-        class={isBgImageLoaded ? 'card-bg card-bg__fade-in' : 'card-bg card-bg__fade-in'}
-        style="transform: translateX({tX}px) translateY({tY}px); ">
-        <iframe
-          title={params.title ? params.title : ''}
-          class="center_video"
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/{params.ytVideoID}?rel=0&amp;controls=0&amp;autoplay=1&amp;mute=1&amp;loop=1&amp;playlist={params.ytVideoID}"
-          frameborder="0"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope;
-          picture-in-picture"
-          loop="1"
-          allowfullscreen
-          onStateChange={handleImageLoaded} />
-      </div>
-    {:else if null != params.vidURL}
-      <div
-        class={isBgImageLoaded ? 'card-bg card-bg__fade-in' : 'card-bg'}
-        style="transform: translateX({tX}px) translateY({tY}px); ">
-        <video
-          class="center_video"
-          src={params.vidURL}
-          autoplay="true"
-          loop="true"
-          muted="true"
-          on:playing={handleImageLoaded} />
-      </div>
-    {:else if null != params.imgURL}
-      <div
-        class={isBgImageLoaded ? 'card-bg card-bg__fade-in' : 'card-bg'}
-        style="transform: translateX({tX}px) translateY({tY}px);
-        background-image: url({params.imgURL})" />
-    {/if}
-
-    <div class="card-info">
-      <h1>{params.title ? params.title : ''}</h1>
-      <p>{params.date ? params.date : ''}</p>
-    </div>
-
-  </div>
-</div>
