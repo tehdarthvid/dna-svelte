@@ -1,0 +1,481 @@
+[
+    {
+        "date": "25 May 1977",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/1977.05.25+Star+Wars+style-A+77-21-0.jpeg",
+        "tags": [
+            "movie",
+            "film appreciation",
+            "fantasy",
+            "space western",
+            "star wars",
+            "medium"
+        ],
+        "title": "Star Wars"
+    },
+    {
+        "date": "4 Jun 1977 - 25 Mar 1978",
+        "imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/1977.06.04+%E3%80%8C%E8%B6%85%E9%9B%BB%E7%A3%81%E3%83%9E%E3%82%B7%E3%83%BC%E3%83%B3+%E3%83%9C%E3%83%AB%E3%83%86%E3%82%B9%EF%BC%B6%E3%80%8D+Voltes_V_Commercial_Banner.png",
+        "tags": [
+            "anime",
+            "super robot"
+        ],
+        "title": "超電磁マシーン ボルテス Ｖ"
+    },
+    {
+        "date": "10 Sep 1977",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/1977.09.10+The+All-New+Superfriends+Hour+op+title+sc.png",
+        "tags": [
+            "animation",
+            "super hero",
+            "team",
+            "comic"
+        ],
+        "title": "The All-New Super Friends Hour"
+    },
+    {
+        "date": "3 Oct 1982 – 26 Jun 1983",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/1982.10.03+%E8%B6%85%E6%99%82%E7%A9%BA%E8%A6%81%E5%A1%9E%E3%83%9E%E3%82%AF%E3%83%AD%E3%82%B9+sc.jpg",
+        "linkedCards": [
+            "Kawamori, Shoji"
+        ],
+        "tags": [
+            "anime",
+            "mecha"
+        ],
+        "title": "超時空要塞 マクロス"
+    },
+    {
+        "date": "23 Jan 1983",
+        "imgURL": "https://mindreels.files.wordpress.com/2015/09/the-a-team.jpg",
+        "tags": [
+            "TV",
+            "team"
+        ],
+        "title": "The A-Team"
+    },
+    {
+        "date": "15 Jul 1983",
+        "imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/1983.07.15+famicom+ad.jpg",
+        "tags": [
+            "videogames",
+            "hardware",
+            "retro",
+            "music",
+            "pixels",
+            "software engineering"
+        ],
+        "title": "ファミリー コンピュータ"
+    },
+    {
+        "date": "13 Sep 1985",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/1985.09.13+SuperMarioBros+Japan+boxart.jpg",
+        "tags": [
+            "videogame",
+            "platformer"
+        ],
+        "title": "Super Mario Bros."
+    },
+    {
+        "date": "Nov 1990",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/1990.11+Uncanny+X-Men+270.jpg",
+        "linkedCards": [
+            "Lee, Jim"
+        ],
+        "tags": [
+            "comic",
+            "Marvel",
+            "team"
+        ],
+        "title": "X-Tinction Agenda"
+    },
+    {
+        "date": "24 Sep 1991",
+        "imgURL": "https://images.genius.com/24be3cd0b550d14375035de8c9c4c74c.1000x1000x1.jpg",
+        "tags": [
+            "music"
+        ],
+        "title": "Nevermind"
+    },
+    {
+        "date": "5 Sep 1992 – 15 Sep 1995",
+        "imgURL": "https://vignette1.wikia.nocookie.net/batman/images/2/24/BTASposter.png",
+        "tags": [
+            "animation",
+            "Batman",
+            "clarity"
+        ],
+        "title": "Batman: The Animated Series"
+    },
+    {
+        "date": "5 Aug 1993",
+        "imgURL": "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg",
+        "linkedCards": [
+            "Garfield, Richard"
+        ],
+        "tags": [
+            "game",
+            "rules",
+            "cards",
+            "medium"
+        ],
+        "title": "Magic: The Gathering"
+    },
+    {
+        "date": "23 Feb 1994",
+        "imgURL": "https://steamuserimages-a.akamaihd.net/ugc/543003889249989774/5AAD2D518617DBB02B61EACECFEDC2BF336C9F6E/",
+        "tags": [
+            "videogame",
+            "fighting game"
+        ],
+        "title": "Super Street Fighter II X: Grand Master Challenge"
+    },
+    {
+        "date": "4 Oct 1988 – 23 May 1995",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/1988.10.04+Dragon+Ball+195+title+WSJ+1988-45+1032.png",
+        "linkedCards": [
+            "Toriyama, Akira"
+        ],
+        "tags": [
+            "manga",
+            "anime",
+            "medium",
+            "draw",
+            "panel flow"
+        ],
+        "title": "ドラゴンボールZ"
+    },
+    {
+        "date": "19 Aug 1987 – 6 Mar 1996",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/1987.09+%E3%80%8C%E3%82%89%E3%82%93%E3%81%BE+1_2%E3%80%8D+%E9%80%B1%E5%88%8A%E5%B0%91%E5%B9%B4%E3%82%B5%E3%83%B3%E3%83%87%E3%83%BC+36+9478482851_04bd05ff94_b.jpg",
+        "linkedCards": [
+            "Takahashi, Rumiko"
+        ],
+        "tags": [
+            "manga",
+            "anime",
+            "medium"
+        ],
+        "title": "らんま 1/2"
+    },
+    {
+        "date": "1 Oct 1975",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/1975.10.01+Tao+of+Jeet+Kune+Do.jpg",
+        "linkedCards": [
+            "Lee, Bruce"
+        ],
+        "tags": [
+            "book",
+            "martial arts"
+        ],
+        "title": "Tao of Jeet Kune Do"
+    },
+    {
+        "date": "4 Oct 1995 – 27 Mar 1996",
+        "imgURL": "https://ia.media-imdb.com/images/M/MV5BYjY1Y2ZmNDctZWQ3Yy00MTE3LTk2M2QtMjQ0MDA5ODVjMDEyXkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
+        "linkedCards": [
+            "庵野 秀明",
+            "貞本 義行"
+        ],
+        "tags": [
+            "anime",
+            "medium",
+            "mecha"
+        ],
+        "title": "新世紀 エヴァンゲリオン"
+    },
+    {
+        "date": "20 Mar 1997",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/1997.03.20+%E6%82%AA%E9%AD%94%E5%9F%8E+%E3%83%88%E3%82%99%E3%83%A9%E3%82%AD%E3%83%A5%E3%83%A9%EF%BC%B8%E6%9C%88%E3%81%AE%E5%A4%9C%E6%83%B3%E6%9B%B2.jpg",
+        "tags": [
+            "videogame",
+            "platformer"
+        ],
+        "title": "悪魔城 ドラキュラＸ 月下の夜想曲"
+    },
+    {
+        "date": "3 Mar 1998",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/1998.03.31StarCraft-Box-807x1024.jpg",
+        "linkedCards": [
+            "Blizzard"
+        ],
+        "tags": [
+            "videogame",
+            "RTS"
+        ],
+        "title": "Starcraft"
+    },
+    {
+        "date": "22 Feb 1978",
+        "imgURL": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/The_C_Programming_Language%2C_First_Edition_Cover.svg/640px-The_C_Programming_Language%2C_First_Edition_Cover.svg.png",
+        "tags": [
+            "software engineering"
+        ],
+        "title": "K&R C"
+    },
+    {
+        "date": "Oct 1995",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/1995.10+Siedler+von+Catan+Franckh+Kosmos+Erstausgabe.jpg",
+        "tags": [
+            "games",
+            "medium",
+            "rules"
+        ],
+        "title": "Die Siedler von Catan"
+    },
+    {
+        "date": "10 Oct 2007",
+        "imgURL": "https://images6.alphacoders.com/749/thumb-1920-749217.jpg",
+        "linkedCards": [
+            "Valve"
+        ],
+        "tags": [
+            "videogame",
+            "FPS"
+        ],
+        "title": "Team Fortress 2"
+    },
+    {
+        "date": "26 May 1989",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/1989+81i8IM58zLL.jpg",
+        "tags": [
+            "book",
+            "medium",
+            "storytelling"
+        ],
+        "title": "Hyperion"
+    },
+    {
+        "date": "2 Aug 2006",
+        "imgURL": "https://secureimg.stitcher.com/feedimagesplain328/6637.jpg",
+        "tags": [
+            "podcast",
+            "videogame",
+            "medium"
+        ],
+        "title": "Gamers With Jobs Conference Call"
+    },
+    {
+        "date": "3 Apr 2009 - 26 Jun 2009",
+        "imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/2009.04.03+K-On.jpg",
+        "tags": [
+            "anime",
+            "manga",
+            "medium",
+            "music",
+            "nuanced",
+            "KyoAni"
+        ],
+        "title": "K-On!"
+    },
+    {
+        "date": "1 Aug 2009",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/2009.08.01+%E3%82%B5%E3%83%9E%E3%83%BC%E3%82%A6%E3%82%A9%E3%83%BC%E3%82%B9%E3%82%99.jpg",
+        "linkedCards": [
+            "Hosada, Mamoru",
+            "貞本 義行"
+        ],
+        "tags": [
+            "movie",
+            "anime"
+        ],
+        "title": "サマーウォーズ"
+    },
+    {
+        "date": "14 Aug 2009",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/2009.08.14+REDLINE+theatrical+release+poster.jpg",
+        "linkedCards": [
+            "Koike, Takeshi"
+        ],
+        "tags": [
+            "anime",
+            "medium",
+            "movie",
+            "film appreciation"
+        ],
+        "title": "Redline"
+    },
+    {
+        "date": "3 Jul 2009 - 25 Jun 2010",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/2009.07.03+%E5%8C%96%E7%89%A9%E8%AA%9E+anime.jpg",
+        "linkedCards": [
+            "Nissioisin"
+        ],
+        "tags": [
+            "anime",
+            "light novel",
+            "film appreciation",
+            "expressionist",
+            "symbolism"
+        ],
+        "title": "化物語"
+    },
+    {
+        "date": "Apr 2004",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/2004.04+Dunny.jpg",
+        "linkedCards": [
+            "Kid Robot"
+        ],
+        "tags": [
+            "vinyl",
+            "designer toys"
+        ],
+        "title": "Dunny"
+    },
+    {
+        "date": "7 Jan 2011 - 21 Apr 2011",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/2011.01.07+%E3%80%8C%E9%AD%94%E6%B3%95%E5%B0%91%E5%A5%B3%E3%81%BE%E3%81%A9%E3%81%8B%E2%98%86%E3%83%9E%E3%82%AE%E3%82%AB%E3%80%8D+4744f30136df1ad1e6c012b5a1cda5ea.jpg",
+        "linkedCards": [
+            "Urobuchi, Gen"
+        ],
+        "tags": [
+            "anime",
+            "storytelling"
+        ],
+        "title": "魔法少女まどか ☆ マギカ"
+    },
+    {
+        "date": "28 Sep 2011",
+        "imgURL": "https://playindiegames.files.wordpress.com/2011/09/the-binding-of-isaac.jpg",
+        "linkedCards": [
+            "McMillan, Edmund"
+        ],
+        "tags": [
+            "videogame",
+            "game design",
+            "expressionist"
+        ],
+        "title": "The Binding of Isaac"
+    },
+    {
+        "date": "8 Jul 2011 - 23 Dec 2011",
+        "imgURL": "https://frozenmyst.files.wordpress.com/2011/12/826377.jpg",
+        "linkedCards": [
+            "錦織 敦史"
+        ],
+        "tags": [
+            "anime",
+            "draw",
+            "character design"
+        ],
+        "title": "The iDOLM@STER"
+    },
+    {
+        "date": "22 Apr 2012 - 16 Sep 2012",
+        "imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/2012.04.22+%E3%80%8C%E6%B0%B7%E8%8F%93%E3%80%8D+hyouka-573a0736365cb.jpg",
+        "linkedCards": [
+            "KyoAni"
+        ],
+        "tags": [
+            "anime",
+            "film appreciation",
+            "medium",
+            "expressionist",
+            "character design",
+            "nuanced"
+        ],
+        "title": "氷菓"
+    },
+    {
+        "date": "4 Oct 2013 - 28 Mar 2014",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/2013.10.04+%E3%80%8C%E3%82%AD%E3%83%AB%E3%83%A9%E3%82%AD%E3%83%AB%E3%80%8D+100051.jpg",
+        "linkedCards": [
+            "Trigger",
+            "すしお",
+            "石崎 寿夫",
+            "今石 洋之",
+            "永井 豪"
+        ],
+        "tags": [
+            "anime",
+            "film appreciation",
+            "medium",
+            "draw",
+            "expressionist",
+            "character design"
+        ],
+        "title": "キルラキル"
+    },
+    {
+        "date": "7 Jul 2014 - 22 Sep 2014",
+        "imgURL": "https://planetdp.org//covers/big/dp16553.jpg",
+        "tags": [
+            "anime",
+            "manga",
+            "humor"
+        ],
+        "title": "月刊少女野崎くん"
+    },
+    {
+        "date": "16 Apr 2014 Apr - 2 Dec 2017",
+        "imgURL": "https://yt3.ggpht.com/-idi8PvE0BEI/AAAAAAAAAAI/AAAAAAAAAAA/RIWRHpkQspo/s288-mo-c-c0xffffffff-rj-k-no/photo.jpg",
+        "tags": [
+            "film appreciation"
+        ],
+        "title": "Every Frame a Painting"
+    },
+    {
+        "date": "7 May 2015",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/2015.05.07+Mad+Max+Fury+Road+11110866_658246694280855_1682386295316885693_o.jpg",
+        "tags": [
+            "movie",
+            "medium",
+            "film appreciation",
+            "worldbuilding"
+        ],
+        "title": "Mad Max: Fury Road"
+    },
+    {
+        "date": "24 May 2016",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/2016.05.24+Overwatch.jpg",
+        "linkedCards": [
+            "Blizzard"
+        ],
+        "tags": [
+            "videogame",
+            "FPS",
+            "character design"
+        ],
+        "title": "Overwatch"
+    },
+    {
+        "date": "3 Jul 2016",
+        "imgURL": "https://movies-pctr.c.yimg.jp/dk/iwiz-movies/pict/p/p/32/91/169395_02.jpg",
+        "linkedCards": [
+            "新海 誠"
+        ],
+        "tags": [
+            "anime",
+            "movie",
+            "film appreciation",
+            "emotional storytelling"
+        ],
+        "title": "君の名は。"
+    },
+    {
+        "date": "4 Aug 2015",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/2015.08.04+The+Fifth+Season.jpeg",
+        "tags": [
+            "book",
+            "storytelling"
+        ],
+        "title": "The Fifth Season"
+    },
+    {
+        "date": "17 Jun 2015",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/2015.06.17+ES6+ECMAScript+2015.jpg",
+        "tags": [
+            "software engineering"
+        ],
+        "title": "ES2015"
+    },
+    {
+        "date": "3 Mar 2014",
+        "imgURL": "https://s3-ap-northeast-1.amazonaws.com/sk2q169cx9pfoawet3et/ditim/2014.03.03+Junkfood+Cinema+logo.jpg",
+        "tags": [
+            "podcast",
+            "movie",
+            "film appreciation"
+        ],
+        "title": "Junkfood Cinema"
+    }
+]
