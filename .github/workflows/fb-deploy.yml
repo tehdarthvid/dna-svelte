@@ -1,9 +1,10 @@
 name: Build and Deploy
 
-# Ensure the following 4 items are defined/updated:
-#   1. runner env FIREBASE_TOKEN: Firebase Token
-#   2. runner env FIREBASE_PROJECT_ID: Firebase Project to deploy to
-#   3. runner env GA_TRACKING_ID: Google Analytics tracking ID
+# Ensure the following 3 items are defined/updated:
+#   1. secret FIREBASE_SERVICE_ACCOUNT: JSON key of a service account with the
+#      "Firebase Hosting Admin" role (replaces the deprecated FIREBASE_TOKEN)
+#   2. secret FIREBASE_PROJECT_ID: Firebase Project to deploy to
+#   3. secret GA_TRACKING_ID: Google Analytics tracking ID
 
 #   4. Update source branch and other trigger filters.
 on:
@@ -22,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check-out ${{ github.ref }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Build ${{ github.ref }}
         env:
@@ -36,8 +37,12 @@ jobs:
         run: |
           npm install firebase-tools
 
-      - name: Set the Firebase Project then deploy "public" to Firebase Hosting
+      - name: Deploy "public" to Firebase Hosting
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
-          export PATH="./node_modules/.bin:$PATH/"
-          firebase use --add ${{ secrets.FIREBASE_PROJECT_ID }} --token "${{ secrets.FIREBASE_TOKEN }}"
-          firebase deploy --only hosting -m "built from ${{ github.sha }}" --token "${{ secrets.FIREBASE_TOKEN }}"
+          export PATH="./node_modules/.bin:$PATH"
+          echo "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/sa.json"
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/sa.json"
+          firebase deploy --only hosting --project "${{ secrets.FIREBASE_PROJECT_ID }}" -m "built from ${{ github.sha }}"
+          rm -f "$RUNNER_TEMP/sa.json"
