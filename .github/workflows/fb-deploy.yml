@@ -25,12 +25,16 @@ jobs:
       - name: Check-out ${{ github.ref }}
         uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: npm install
+
+      - name: Test
+        run: npm test
+
       - name: Build ${{ github.ref }}
         env:
           GA_TRACKING_ID: ${{ secrets.GA_TRACKING_ID }}
-        run: |
-          npm install
-          npm run build
+        run: npm run build
 
       - name: Install Firebase-CLI
         run: |
