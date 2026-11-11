@@ -16,7 +16,8 @@
     "dev": "rollup -c -w",
     "start": "sirv public",
     "predeploy": "npm run build",
-    "version": "auto-changelog -p && git add CHANGELOG.md"
+    "version": "auto-changelog -p && git add CHANGELOG.md",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^29.0.3",
@@ -24,14 +25,18 @@
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-replace": "^6.0.3",
     "@rollup/plugin-terser": "^1.0.2",
+    "@sveltejs/vite-plugin-svelte": "^7.3.1",
+    "@testing-library/svelte": "^5.4.2",
     "auto-changelog": "^2.0.0",
+    "jsdom": "^31.0.0",
     "minimist": "^1.2.5",
     "rollup": "^4.68.1",
     "rollup-plugin-css-only": "^4.5.5",
     "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-svelte": "^7.2.3",
-    "sirv-cli": "^0.4.5",
-    "svelte": "^5.57.3"
+    "sirv-cli": "^3.0.1",
+    "svelte": "^5.57.3",
+    "vitest": "^5.1.0"
   },
   "type": "module"
 }
