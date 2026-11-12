@@ -1,12 +1,10 @@
 <script>
-  let { pkg_ver, svelte_ver } = $props();
+  import { PUBLIC_GITHUB_SHA } from "$app/env/public";
+  import Deck from "#lib/views/Deck.svelte";
 
-  import { googleAnalytics } from "./utils/google-analytics.js";
-
-  import Deck from "./views/Deck.svelte";
-
-  if (process.env.gaID) googleAnalytics(process.env.gaID);
-  const strGitHash = process.env.git_hash.slice(0, 7);
+  const pkg_ver = __PKG_VERSION__;
+  const svelte_ver = __SVELTE_VERSION__;
+  const strGitHash = PUBLIC_GITHUB_SHA.slice(0, 7);
 </script>
 
 <style>

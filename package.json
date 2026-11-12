@@ -12,31 +12,26 @@
     "url": "https://darthvid.com/"
   },
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
-    "start": "sirv public",
-    "predeploy": "npm run build",
+    "build": "vite build",
+    "dev": "vite dev",
     "version": "auto-changelog -p && git add CHANGELOG.md",
-    "test": "vitest run"
+    "test": "vitest run",
+    "preview": "vite preview"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^29.0.3",
-    "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^16.0.3",
-    "@rollup/plugin-replace": "^6.0.3",
-    "@rollup/plugin-terser": "^1.0.2",
+    "@sveltejs/adapter-static": "^4.0.1",
+    "@sveltejs/kit": "^3.2.0",
     "@sveltejs/vite-plugin-svelte": "^7.3.1",
     "@testing-library/svelte": "^5.4.2",
     "auto-changelog": "^2.0.0",
     "jsdom": "^31.0.0",
     "minimist": "^1.2.5",
-    "rollup": "^4.68.1",
-    "rollup-plugin-css-only": "^4.5.5",
-    "rollup-plugin-livereload": "^2.0.5",
-    "rollup-plugin-svelte": "^7.2.3",
-    "sirv-cli": "^3.0.1",
     "svelte": "^5.57.3",
+    "vite": "^8.3.8",
     "vitest": "^5.1.0"
   },
-  "type": "module"
+  "type": "module",
+  "imports": {
+    "#lib/*": "./src/lib/*"
+  }
 }

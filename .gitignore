@@ -1,4 +1,8 @@
 .DS_Store
 node_modules
-public/build
-
+/build
+/.svelte-kit
+.env
+.env.*
+!.env.example
+vite.config.js.timestamp-*

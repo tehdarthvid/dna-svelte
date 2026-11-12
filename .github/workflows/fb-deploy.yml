@@ -33,14 +33,15 @@ jobs:
 
       - name: Build ${{ github.ref }}
         env:
-          GA_TRACKING_ID: ${{ secrets.GA_TRACKING_ID }}
+          PUBLIC_GA_TRACKING_ID: ${{ secrets.GA_TRACKING_ID }}
+          PUBLIC_GITHUB_SHA: ${{ github.sha }}
         run: npm run build
 
       - name: Install Firebase-CLI
         run: |
           npm install firebase-tools
 
-      - name: Deploy "public" to Firebase Hosting
+      - name: Deploy "build" to Firebase Hosting
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |

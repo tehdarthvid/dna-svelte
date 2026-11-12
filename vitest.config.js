@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [svelte(), svelteTesting()],
   test: {
     environment: "jsdom",
-    include: ["src/**/*.test.js"]
+    include: ["src/**/*.test.js"],
+    setupFiles: ["./vitest.setup.js"]
   }
 });

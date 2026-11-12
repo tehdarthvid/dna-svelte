@@ -4,38 +4,37 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Personal "influences DNA" page (https://dna.darthvid.com/), a Svelte 5 (runes) + Rollup 4 single-page app built as a webdev learning exercise (earlier iterations were Vue/React; see README). Code is intentionally experimental/messy. Tests use Vitest (`npm test`); there is no linter.
+Personal "influences DNA" page (https://dna.darthvid.com/), a SvelteKit 3 (Svelte 5 runes) + Vite + `@sveltejs/adapter-static` site built as a webdev learning exercise (earlier iterations were Vue/React; see README). Code is intentionally experimental/messy. Tests use Vitest (`npm test`); there is no linter yet. The last Rollup-based version is tagged `pre-sveltekit-migration`.
 
 ## Commands
 
 - `npm install`
-- `npm run dev` — rollup watch + livereload, then serves `public/` via sirv on the dev server
-- `npm run build` — production bundle to `public/build/bundle.{js,css}` (terser-minified; CSS extracted by `rollup-plugin-css-only`)
-- `npm start` — serve `public/` only (no build)
+- `npm run dev` — Vite dev server
+- `npm run build` — prerenders the site into `build/` (every route is prerendered; `src/routes/+layout.js` sets `prerender = true`)
+- `npm run preview` — serve `build/`
+- `npm test` — Vitest (jsdom), `src/**/*.test.js`. `vitest.setup.js` stubs `HTMLDialogElement.showModal`/`close`, which jsdom lacks.
 - `npm version <x>` — runs `auto-changelog` and stages `CHANGELOG.md` (don't edit the changelog by hand)
 
-**Required env vars:** `rollup.config.js` throws at startup unless `GITHUB_SHA` and `GA_TRACKING_ID` are set, even for `dev`. Locally, e.g.:
+**Build-time env:** `PUBLIC_GITHUB_SHA` and `PUBLIC_GA_TRACKING_ID` are declared with `defineEnvVars` in `src/env.js` (SvelteKit 3 API) and imported from `$app/env/public`. Both are optional: the SHA defaults to `dev`, and an empty GA ID skips analytics. CI sets them from `github.sha` and the `GA_TRACKING_ID` secret. Note the user's shell profile exports placeholder values for these (e.g. `PUBLIC_GA_TRACKING_ID=PUBLIC_GA_TRACKING_ID`); use `env -u` to test the unset case.
 
-```
-GITHUB_SHA=$(git rev-parse HEAD) GA_TRACKING_ID=dev npm run dev
-```
-
-The footer's Svelte version is read from the installed `svelte/package.json` at build time.
+The package and Svelte versions shown on the page are `__PKG_VERSION__` / `__SVELTE_VERSION__`, Vite `define` constants set in `vite.config.js` (Svelte's is read from the installed `svelte/package.json`). Their types are in `src/app.d.ts`.
 
 ## Architecture
 
-- **Build-time config injection:** `rollup.config.js` uses `@rollup/plugin-replace` with explicit `process.env.<key>` entries, so `process.env.pkg_ver`, `svelte_ver`, `git_hash`, `gaID` in `src/` are compile-time constants. Don't replace the bare `process` identifier: it corrupts Svelte 5 internals (`#process()`) (note the lowercase names differ from the shell env vars above). Adding a new config value means adding a key to the `replace` `values` in rollup config, not just `.env`.
-- **Data flow:** card content lives in `src/data/deck.json`, bundled via `@rollup/plugin-json`. `src/stores/deckStore.js` exposes `deck` as a Svelte `readable` that first sets 10 empty placeholder cards, then `stores/actions.js` `initDeck` replaces them with the imported JSON. `activeCard` (writable) holds the card selected for the modal.
-- **Svelte 5 conventions:** components use runes (`$props`, `$state`, `$derived`, `$effect`) and DOM-attribute events (`onclick`, not `on:click`); child→parent communication is via callback props (e.g. `Modal`'s `onclose`) rather than `createEventDispatcher`. The app is mounted with `mount()` in `main.js`. `Card.svelte` is kept in sync with the one in the sibling project `tehdarthvid/tehdarthvid.github.io` (SvelteKit, `claude-experiments` branch); the main difference is that this one sets `activeCard` on double-click (opens the modal) instead of `window.open`.
-- **Component tree:** `main.js` → `App.svelte` (header, version/commit links, GA init) → `views/Deck.svelte` (renders `$deck` as `Card`s; shows `Modal` when `activeCard` is set) → `components/Card.svelte` (3D parallax hover effect; double-click sets `activeCard`) / `components/Modal.svelte` (full-size image, calls `onclose` on click or Esc).
+- **Imports:** SvelteKit 3 removed `$lib`; use `#lib/*` (Node subpath import declared in `package.json` `imports`).
+- **Shell:** `src/app.html` holds the CSP `<meta>`, title, favicon and Google Fonts link. `src/routes/+layout.svelte` imports `styles.css` (global styles) and renders `#lib/analytics/Analytics.svelte` (gtag, only when the GA ID is set).
+- **Page:** `src/routes/+page.svelte` (header, version/commit links, footer) → `#lib/views/Deck.svelte` → `#lib/components/Card.svelte` / `#lib/components/Modal.svelte`.
+- **Data flow:** card content lives in `src/lib/data/deck.json`, imported directly by `Deck.svelte` and rendered in a keyed `{#each}` (key: `title`, which the data test enforces as unique). `Deck` holds the opened card as local `$state`; there are no stores.
+- **Card:** 3D parallax hover effect; double-click calls the `onopen(params)` callback prop. `Card.svelte` is meant to be identical to the one in the sibling project `tehdarthvid/tehdarthvid.github.io` (`claude-experiments` branch), whose Deck would pass `onopen` to do its `window.open`. It uses tabs because the sibling is Prettier-formatted.
+- **Modal:** a native `<dialog>` opened with `showModal()`. Esc closes it natively; any click calls `close()`. Both paths fire the `close` event, which calls `onclose`.
 - **Card JSON fields** (as used by `Card.svelte`): `title`, `date`, `imgURL`, `vidURL`, `ytVideoID`. Precedence for the background media is `ytVideoID` > `vidURL` > `imgURL`.
-- `utils/google-analytics.js` injects gtag when `gaID` is set; `utils/logger.js` just re-exports `console`.
+- **Svelte 5 conventions:** runes (`$props`, `$state`, `$derived`, `$effect`), DOM-attribute events (`onclick`), callback props instead of `createEventDispatcher`.
 
 ## Deployment
 
-Security response headers (HSTS, nosniff, Referrer-Policy, etc.) are set in `firebase.json` `hosting.headers`; only the CSP stays as a `<meta>` in `public/index.html` (so it also applies in local dev). Meta `http-equiv` versions of the other headers are ignored by browsers.
+Security response headers (HSTS, nosniff, Referrer-Policy, etc.) are set in `firebase.json` `hosting.headers`; only the CSP stays as a `<meta>` in `src/app.html` (so it also applies in local dev). Meta `http-equiv` versions of the other headers are ignored by browsers.
 
-GitHub Actions (`.github/workflows/fb-deploy.yml`) builds and deploys `public/` to Firebase Hosting on push to `master` (ignoring README/CHANGELOG/.gitignore/.gitattributes changes). It relies on repo secrets `GA_TRACKING_ID`, `FIREBASE_PROJECT_ID`, `FIREBASE_SERVICE_ACCOUNT`.
+GitHub Actions (`.github/workflows/fb-deploy.yml`) builds and deploys `build/` to Firebase Hosting on push to `master` (ignoring README/CHANGELOG/.gitignore/.gitattributes changes). It relies on repo secrets `GA_TRACKING_ID`, `FIREBASE_PROJECT_ID`, `FIREBASE_SERVICE_ACCOUNT`.
 
 ## Known issues
 

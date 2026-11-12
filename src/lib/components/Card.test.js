@@ -1,8 +1,6 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, fireEvent } from "@testing-library/svelte";
-import { get } from "svelte/store";
 import Card from "./Card.svelte";
-import { activeCard } from "../stores/deckStore.js";
 
 const base = {
   title: "Star Wars",
@@ -10,7 +8,6 @@ const base = {
   imgURL: "https://x.test/sw.jpg"
 };
 
-beforeEach(() => activeCard.set(null));
 afterEach(() => vi.useRealTimers());
 
 describe("Card", () => {
@@ -26,14 +23,16 @@ describe("Card", () => {
     expect(getByRole("img").getAttribute("aria-label")).toBe("");
   });
 
-  it("sets activeCard on double click", async () => {
+  it("calls onopen with its params on double click", async () => {
+    const onopen = vi.fn();
+    const { getByRole } = render(Card, { params: base, onopen });
+    await fireEvent.dblClick(getByRole("img"));
+    expect(onopen).toHaveBeenCalledExactlyOnceWith(base);
+  });
+
+  it("ignores double click without onopen", async () => {
     const { getByRole } = render(Card, { params: base });
     await fireEvent.dblClick(getByRole("img"));
-    expect(get(activeCard)).toEqual({
-      title: "Star Wars",
-      imgURL: base.imgURL,
-      date: base.date
-    });
   });
 
   it("renders a YouTube iframe when ytVideoID is set", () => {
