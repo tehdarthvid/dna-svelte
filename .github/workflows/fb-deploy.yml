@@ -1,52 +1,75 @@
 name: Build and Deploy
 
-# Ensure the following 3 items are defined/updated:
-#   1. secret FIREBASE_SERVICE_ACCOUNT: JSON key of a service account with the
-#      "Firebase Hosting Admin" role (replaces the deprecated FIREBASE_TOKEN)
-#   2. secret FIREBASE_PROJECT_ID: Firebase Project to deploy to
-#   3. secret GA_TRACKING_ID: Google Analytics tracking ID
-
-#   4. Update source branch and other trigger filters.
+# Requires repo secrets:
+#   - FIREBASE_SERVICE_ACCOUNT: JSON key of a service account with the
+#     "Firebase Hosting Admin" role
+#   - FIREBASE_PROJECT_ID: Firebase project to deploy to
+#   - GA_TRACKING_ID: Google Analytics measurement ID (live deploys only)
+#
+# master deploys to the live site; claude-experiments deploys to a 7-day
+# Firebase preview channel. Both run every check first.
 on:
   push:
     branches:
       - master
-    paths:
-      - '**'
-      - '!README.md'
-      - '!.gitignore'
-      - '!.gitattributes'
-      - '!CHANGELOG.md'
+      - claude-experiments
+    paths-ignore:
+      - 'README.md'
+      - 'CHANGELOG.md'
+      - '.gitignore'
+      - '.gitattributes'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  # superseded previews can be dropped; never cancel a live deploy midway
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 
 jobs:
-  fb-deploy-job:
-    runs-on: ubuntu-latest
+  build-and-deploy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PUBLIC_GITHUB_SHA: ${{ github.sha }}
     steps:
-      - name: Check-out ${{ github.ref }}
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - name: Install dependencies
-        run: npm install
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+          cache: npm
 
-      - name: Test
-        run: npm test
+      - run: npm ci
 
-      - name: Build ${{ github.ref }}
+      - run: npm run lint
+
+      - run: npm run check
+
+      - run: npm test
+
+      # no --with-deps: the runner image already has what Chromium needs
+      - run: npx playwright install chromium
+        timeout-minutes: 5
+
+      # builds without the GA ID, so CI page loads don't reach Analytics
+      - run: npm run test:e2e
+
+      - name: Build
         env:
-          PUBLIC_GA_TRACKING_ID: ${{ secrets.GA_TRACKING_ID }}
-          PUBLIC_GITHUB_SHA: ${{ github.sha }}
+          # previews get no GA, so they don't count as site traffic
+          PUBLIC_GA_TRACKING_ID: ${{ github.ref == 'refs/heads/master' && secrets.GA_TRACKING_ID || '' }}
         run: npm run build
 
-      - name: Install Firebase-CLI
-        run: |
-          npm install firebase-tools
+      - name: Deploy to Firebase Hosting
+        id: deploy
+        uses: FirebaseExtended/action-hosting-deploy@v0.11.0
+        with:
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
+          channelId: ${{ github.ref == 'refs/heads/master' && 'live' || 'claude-experiments' }}
+          expires: 7d
 
-      - name: Deploy "build" to Firebase Hosting
-        env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-        run: |
-          export PATH="./node_modules/.bin:$PATH"
-          echo "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/sa.json"
-          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/sa.json"
-          firebase deploy --only hosting --project "${{ secrets.FIREBASE_PROJECT_ID }}" -m "built from ${{ github.sha }}"
-          rm -f "$RUNNER_TEMP/sa.json"
+      - name: Summary
+        run: echo "Deployed to ${{ steps.deploy.outputs.details_url }}" >> "$GITHUB_STEP_SUMMARY"

@@ -41,7 +41,12 @@ Prettier (same config as the sibling): tabs, single quotes, no trailing commas, 
 
 Security response headers (HSTS, nosniff, Referrer-Policy, etc.) are set in `firebase.json` `hosting.headers`; only the CSP stays as a `<meta>` in `src/app.html` (so it also applies in local dev). Meta `http-equiv` versions of the other headers are ignored by browsers.
 
-GitHub Actions (`.github/workflows/fb-deploy.yml`) builds and deploys `build/` to Firebase Hosting on push to `master` (ignoring README/CHANGELOG/.gitignore/.gitattributes changes). It relies on repo secrets `GA_TRACKING_ID`, `FIREBASE_PROJECT_ID`, `FIREBASE_SERVICE_ACCOUNT`.
+GitHub Actions (`.github/workflows/fb-deploy.yml`) runs on pushes to `master` and `claude-experiments` (ignoring README/CHANGELOG/.gitignore/.gitattributes changes): `npm ci` → lint → check → Vitest → Playwright (Chromium, no `--with-deps`) → build → deploy with `FirebaseExtended/action-hosting-deploy`.
+
+- `master` deploys to the live site, with GA.
+- `claude-experiments` deploys to the `claude-experiments` preview channel, which expires 7 days after the last push. The URL is in the run's summary. Previews are built without the GA ID so they don't count as traffic, and the Playwright build never has it.
+- Node 26, `ubuntu-24.04`, 15-minute timeout. Concurrent preview runs cancel each other; live runs are never cancelled.
+- Repo secrets: `GA_TRACKING_ID`, `FIREBASE_PROJECT_ID`, `FIREBASE_SERVICE_ACCOUNT`.
 
 ## Known issues
 
