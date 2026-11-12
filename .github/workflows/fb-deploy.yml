@@ -12,11 +12,11 @@ on:
     branches:
       - master
     paths:
-      - "**"
-      - "!README.md"
-      - "!.gitignore"
-      - "!.gitattributes"
-      - "!CHANGELOG.md"
+      - '**'
+      - '!README.md'
+      - '!.gitignore'
+      - '!.gitattributes'
+      - '!CHANGELOG.md'
 
 jobs:
   fb-deploy-job:

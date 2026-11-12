@@ -1,37 +1,51 @@
 {
-  "name": "svelte-app",
-  "version": "0.5.0",
-  "description": "page for major influences to the author",
-  "homepage": "https://dna.darthvid.com/",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/tehdarthvid/dna-svelte"
-  },
-  "author": {
-    "name": "darthvid",
-    "url": "https://darthvid.com/"
-  },
-  "scripts": {
-    "build": "vite build",
-    "dev": "vite dev",
-    "version": "auto-changelog -p && git add CHANGELOG.md",
-    "test": "vitest run",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "@sveltejs/adapter-static": "^4.0.1",
-    "@sveltejs/kit": "^3.2.0",
-    "@sveltejs/vite-plugin-svelte": "^7.3.1",
-    "@testing-library/svelte": "^5.4.2",
-    "auto-changelog": "^2.0.0",
-    "jsdom": "^31.0.0",
-    "minimist": "^1.2.5",
-    "svelte": "^5.57.3",
-    "vite": "^8.3.8",
-    "vitest": "^5.1.0"
-  },
-  "type": "module",
-  "imports": {
-    "#lib/*": "./src/lib/*"
-  }
+	"name": "svelte-app",
+	"version": "0.5.0",
+	"description": "page for major influences to the author",
+	"homepage": "https://dna.darthvid.com/",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/tehdarthvid/dna-svelte"
+	},
+	"author": {
+		"name": "darthvid",
+		"url": "https://darthvid.com/"
+	},
+	"scripts": {
+		"build": "vite build",
+		"dev": "vite dev",
+		"version": "auto-changelog -p && git add CHANGELOG.md",
+		"test": "vitest run",
+		"preview": "vite preview",
+		"lint": "prettier --check . && eslint .",
+		"format": "prettier --write .",
+		"check": "svelte-kit sync && svelte-check",
+		"test:e2e": "playwright test"
+	},
+	"devDependencies": {
+		"@eslint/js": "^10.0.1",
+		"@playwright/test": "^1.65.0",
+		"@sveltejs/adapter-static": "^4.0.1",
+		"@sveltejs/kit": "^3.2.0",
+		"@sveltejs/vite-plugin-svelte": "^7.3.1",
+		"@testing-library/svelte": "^5.4.2",
+		"@types/node": "^26.6.6",
+		"auto-changelog": "^2.0.0",
+		"eslint": "^10.14.0",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-svelte": "^3.24.1",
+		"globals": "^17.14.0",
+		"jsdom": "^31.0.0",
+		"minimist": "^1.2.5",
+		"prettier": "^3.10.1",
+		"prettier-plugin-svelte": "^4.1.1",
+		"svelte": "^5.57.3",
+		"svelte-check": "^4.7.8",
+		"vite": "^8.3.8",
+		"vitest": "^5.1.0"
+	},
+	"type": "module",
+	"imports": {
+		"#lib/*": "./src/lib/*"
+	}
 }

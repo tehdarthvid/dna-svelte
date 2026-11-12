@@ -1,8 +1,8 @@
 <script>
-  import "./styles.css";
-  import Analytics from "#lib/analytics/Analytics.svelte";
+	import './styles.css';
+	import Analytics from '#lib/analytics/Analytics.svelte';
 
-  let { children } = $props();
+	let { children } = $props();
 </script>
 
 <Analytics />

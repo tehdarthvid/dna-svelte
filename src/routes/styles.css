@@ -1,20 +1,20 @@
 body {
-  color: #f7f7f7;
-  background-color: #333333;
-  /* font-family: "Source Code Pro", "Lexend Deca", "Ubuntu", "Noto Sans JP","Avenir", Helvetica, Arial, sans-serif; */
-  font-family: "Ubuntu", "Noto Sans JP", "Avenir", Helvetica, Arial, sans-serif;
-  /* font-size: 1.23em; */
+	color: #f7f7f7;
+	background-color: #333333;
+	/* font-family: "Source Code Pro", "Lexend Deca", "Ubuntu", "Noto Sans JP","Avenir", Helvetica, Arial, sans-serif; */
+	font-family: 'Ubuntu', 'Noto Sans JP', 'Avenir', Helvetica, Arial, sans-serif;
+	/* font-size: 1.23em; */
 }
 
 a {
-  color: #66aa66;
-  text-decoration: none;
+	color: #66aa66;
+	text-decoration: none;
 }
 
 a:hover {
-  text-decoration: underline overline;
+	text-decoration: underline overline;
 }
 
 a:visited {
-  color: #669966;
+	color: #669966;
 }
