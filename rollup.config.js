@@ -10,9 +10,14 @@ import replace from "@rollup/plugin-replace";
 
 //import replace from "rollup-plugin-replace";
 import { readFileSync } from "fs";
-import { execSync, spawn } from "child_process";
+import { spawn } from "child_process";
+import { createRequire } from "module";
 
 const { version } = JSON.parse(readFileSync("./package.json", "utf8"));
+// the Svelte version actually bundled (not the latest on npm)
+const { version: svelteVersion } = createRequire(import.meta.url)(
+  "svelte/package.json"
+);
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -38,11 +43,7 @@ export default {
       delimiters: ["\\b", "\\b"],
       values: {
         "process.env.pkg_ver": JSON.stringify(version),
-        "process.env.svelte_ver": JSON.stringify(
-          execSync("npm info svelte version")
-            .toString()
-            .trim()
-        ),
+        "process.env.svelte_ver": JSON.stringify(svelteVersion),
         "process.env.git_hash": JSON.stringify(process.env.GITHUB_SHA),
         "process.env.gaID": JSON.stringify(process.env.GA_TRACKING_ID)
       }

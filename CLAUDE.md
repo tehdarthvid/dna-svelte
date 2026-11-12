@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Personal "influences DNA" page (https://dna.darthvid.com/), a Svelte 5 (runes) + Rollup 4 single-page app built as a webdev learning exercise (earlier iterations were Vue/React; see README). Code is intentionally experimental/messy. There are no tests and no linter.
+Personal "influences DNA" page (https://dna.darthvid.com/), a Svelte 5 (runes) + Rollup 4 single-page app built as a webdev learning exercise (earlier iterations were Vue/React; see README). Code is intentionally experimental/messy. Tests use Vitest (`npm test`); there is no linter.
 
 ## Commands
 
@@ -20,7 +20,7 @@ Personal "influences DNA" page (https://dna.darthvid.com/), a Svelte 5 (runes) +
 GITHUB_SHA=$(git rev-parse HEAD) GA_TRACKING_ID=dev npm run dev
 ```
 
-The build also runs `npm info svelte version` (needs network) to display the latest Svelte version in the footer.
+The footer's Svelte version is read from the installed `svelte/package.json` at build time.
 
 ## Architecture
 
@@ -32,6 +32,8 @@ The build also runs `npm info svelte version` (needs network) to display the lat
 - `utils/google-analytics.js` injects gtag when `gaID` is set; `utils/logger.js` just re-exports `console`.
 
 ## Deployment
+
+Security response headers (HSTS, nosniff, Referrer-Policy, etc.) are set in `firebase.json` `hosting.headers`; only the CSP stays as a `<meta>` in `public/index.html` (so it also applies in local dev). Meta `http-equiv` versions of the other headers are ignored by browsers.
 
 GitHub Actions (`.github/workflows/fb-deploy.yml`) builds and deploys `public/` to Firebase Hosting on push to `master` (ignoring README/CHANGELOG/.gitignore/.gitattributes changes). It relies on repo secrets `GA_TRACKING_ID`, `FIREBASE_PROJECT_ID`, `FIREBASE_SERVICE_ACCOUNT`.
 
