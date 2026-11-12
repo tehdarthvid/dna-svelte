@@ -38,7 +38,9 @@ jobs:
 
       - uses: actions/setup-node@v7
         with:
-          node-version: 26
+          # 24, not 26: firebase-tools (via superstatic) only supports Node 20-24,
+          # and .npmrc engine-strict turns that into an install error
+          node-version: 24
           cache: npm
 
       - run: npm ci
