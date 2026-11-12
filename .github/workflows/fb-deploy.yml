@@ -3,8 +3,10 @@ name: Build and Deploy
 # Requires repo secrets:
 #   - FIREBASE_SERVICE_ACCOUNT: JSON key of a service account with the
 #     "Firebase Hosting Admin" role
-#   - FIREBASE_PROJECT_ID: Firebase project to deploy to
 #   - GA_TRACKING_ID: Google Analytics measurement ID (live deploys only)
+# and repo variable:
+#   - FIREBASE_PROJECT_ID: Firebase project to deploy to. A variable, not a
+#     secret, so the preview URL (which contains it) isn't masked in logs.
 #
 # master deploys to the live site; claude-experiments deploys to a 7-day
 # Firebase preview channel. Both run every check first.
@@ -69,7 +71,7 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@v0.11.0
         with:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
+          projectId: ${{ vars.FIREBASE_PROJECT_ID }}
           channelId: ${{ github.ref == 'refs/heads/master' && 'live' || 'claude-experiments' }}
           expires: 7d
 

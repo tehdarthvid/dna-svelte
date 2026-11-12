@@ -46,7 +46,7 @@ GitHub Actions (`.github/workflows/fb-deploy.yml`) runs on pushes to `master` an
 - `master` deploys to the live site, with GA.
 - `claude-experiments` deploys to the `claude-experiments` preview channel, which expires 7 days after the last push. The URL is in the run's summary. Previews are built without the GA ID so they don't count as traffic, and the Playwright build never has it.
 - Node 24 (not 26: `firebase-tools` only supports Node 20-24, and `.npmrc` `engine-strict` makes that fatal), `ubuntu-24.04`, 15-minute timeout. Concurrent preview runs cancel each other; live runs are never cancelled.
-- Repo secrets: `GA_TRACKING_ID`, `FIREBASE_PROJECT_ID`, `FIREBASE_SERVICE_ACCOUNT`.
+- Repo secrets: `GA_TRACKING_ID`, `FIREBASE_SERVICE_ACCOUNT`. Repo variable: `FIREBASE_PROJECT_ID` (a variable so the preview URL isn't masked; the ID is public anyway).
 
 ## Known issues
 
