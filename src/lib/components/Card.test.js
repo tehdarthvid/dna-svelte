@@ -44,6 +44,17 @@ describe('Card', () => {
 		expect(iframe.getAttribute('src')).toContain('https://www.youtube.com/embed/abc123');
 	});
 
+	it('fades a YouTube card in only after its iframe loads', async () => {
+		const { container } = render(Card, {
+			params: { title: base.title, ytVideoID: 'abc123' }
+		});
+		const bg = must(container.querySelector('.card-bg'));
+		expect(bg.classList.contains('card-bg__fade-in')).toBe(false);
+
+		await fireEvent.load(must(container.querySelector('iframe')));
+		expect(bg.classList.contains('card-bg__fade-in')).toBe(true);
+	});
+
 	it('renders a video element when vidURL is set', () => {
 		const { container } = render(Card, {
 			params: { ...base, vidURL: 'https://x.test/v.mp4' }
