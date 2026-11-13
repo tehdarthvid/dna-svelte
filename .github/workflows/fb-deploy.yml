@@ -34,8 +34,6 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
-    outputs:
-      site_url: ${{ steps.deploy.outputs.details_url }}
     env:
       PUBLIC_GITHUB_SHA: ${{ github.sha }}
     steps:
@@ -94,7 +92,9 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
       ISSUE_TITLE: GA missing on live site
-      SITE_URL: ${{ needs.build-and-deploy.outputs.site_url }}
+      # fixed, not the deploy step's details_url: Actions drops that job output
+      # because it looks like it may contain a secret
+      SITE_URL: https://dna.darthvid.com/
       GA_ID: ${{ secrets.GA_TRACKING_ID }}
     steps:
       - name: Check live page for GA tag
