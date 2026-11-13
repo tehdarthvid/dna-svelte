@@ -3,7 +3,8 @@ name: Build and Deploy
 # Requires repo secrets:
 #   - FIREBASE_SERVICE_ACCOUNT: JSON key of a service account with the
 #     "Firebase Hosting Admin" role
-#   - GA_TRACKING_ID: Google Analytics measurement ID (live deploys only)
+#   - GA_TRACKING_ID: Google Analytics measurement ID (live deploys only; optional
+#     for the build, the check-ga job warns and opens an issue if the live site lacks it)
 # and repo variable:
 #   - FIREBASE_PROJECT_ID: Firebase project to deploy to. A variable, not a
 #     secret, so the preview URL (which contains it) isn't masked in logs.
@@ -33,6 +34,8 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    outputs:
+      site_url: ${{ steps.deploy.outputs.details_url }}
     env:
       PUBLIC_GITHUB_SHA: ${{ github.sha }}
     steps:
@@ -77,3 +80,61 @@ jobs:
 
       - name: Summary
         run: echo "Deployed to ${{ steps.deploy.outputs.details_url }}" >> "$GITHUB_STEP_SUMMARY"
+
+  check-ga:
+    # Live deploys only (previews are built without GA). Never fails the run for
+    # missing GA: warns, and tracks it in one open issue that closes itself once GA is back.
+    if: github.ref == 'refs/heads/master'
+    needs: build-and-deploy
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      ISSUE_TITLE: GA missing on live site
+      SITE_URL: ${{ needs.build-and-deploy.outputs.site_url }}
+      GA_ID: ${{ secrets.GA_TRACKING_ID }}
+    steps:
+      - name: Check live page for GA tag
+        run: |
+          short="${GITHUB_SHA::7}"
+          run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          if [ -z "$SITE_URL" ]; then
+            echo "::warning::No site URL from the deploy job; skipped the GA check"
+            exit 0
+          fi
+
+          # The CDN can serve the previous build for a while, so wait until the
+          # page shows this commit (up to ~10 min). The query string busts caches.
+          page=''
+          for i in $(seq 1 20); do
+            page="$(curl -fsSL --max-time 20 "${SITE_URL%/}/?ga-check=$GITHUB_RUN_ID-$i" || true)"
+            grep -qF "$short" <<<"$page" && break
+            page=''
+            sleep 30
+          done
+          if [ -z "$page" ]; then
+            echo "::warning::$SITE_URL never showed build $short; skipped the GA check"
+            exit 0
+          fi
+
+          issue="$(gh issue list --state open --limit 100 --json number,title \
+            --jq 'map(select(.title == env.ISSUE_TITLE)) | .[0].number // empty')"
+
+          if [ -n "$GA_ID" ] && grep -qF "googletagmanager.com/gtag/js?id=$GA_ID" <<<"$page"; then
+            echo "GA tag present on $SITE_URL (build $short)"
+            if [ -n "$issue" ]; then
+              gh issue close "$issue" --comment "GA is back on $SITE_URL as of $GITHUB_SHA ($run_url)."
+            fi
+            exit 0
+          fi
+
+          echo "::warning::GA tag missing on $SITE_URL (build $short)"
+          body="The GA tag is missing on $SITE_URL after deploying $GITHUB_SHA ($run_url)."
+          if [ -n "$issue" ]; then
+            gh issue comment "$issue" --body "Still missing. $body"
+          else
+            gh issue create --title "$ISSUE_TITLE" --body "$body"$'\n\n'"Check that the GA ID repo secret is set and that the build reads it. This issue closes itself once a deploy has GA again."
+          fi
