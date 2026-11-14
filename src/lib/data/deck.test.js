@@ -22,6 +22,7 @@ describe('deck.json', () => {
 		expect(card.date).toBeTypeOf('string');
 		expect(card.date.trim()).not.toBe('');
 		expect(isHttpsUrl(card.imgURL)).toBe(true);
+		if (card.thumbURL !== undefined) expect(isHttpsUrl(card.thumbURL)).toBe(true);
 		expect(Array.isArray(card.tags)).toBe(true);
 		card.tags.forEach((t) => expect(t).toBeTypeOf('string'));
 		if (card.linkedCards !== undefined) {

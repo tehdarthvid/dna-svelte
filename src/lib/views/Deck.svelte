@@ -9,7 +9,11 @@
 
 <div class="container">
 	{#each deck as card (card.title)}
-		<Card params={card} onopen={() => (activeCard = card)} />
+		<!-- cards show the small thumbnail; the modal opens the full-size imgURL -->
+		<Card
+			params={{ ...card, imgURL: card.thumbURL ?? card.imgURL }}
+			onopen={() => (activeCard = card)}
+		/>
 	{/each}
 </div>
 {#if activeCard}

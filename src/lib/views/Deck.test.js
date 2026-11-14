@@ -10,6 +10,12 @@ describe('Deck', () => {
 		expect(getAllByRole('img')).toHaveLength(deckData.length);
 	});
 
+	it('shows the thumbnail on the card', () => {
+		const { container } = render(Deck);
+		const bg = must(container.querySelectorAll('.card-bg')[1]);
+		expect(bg.getAttribute('style')).toContain(deckData[1].thumbURL ?? deckData[1].imgURL);
+	});
+
 	it('shows no modal until a card is opened', () => {
 		const { container } = render(Deck);
 		expect(container.querySelector('dialog')).toBeNull();
