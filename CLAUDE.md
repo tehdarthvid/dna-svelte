@@ -39,13 +39,14 @@ Prettier (same config as the sibling): tabs, single quotes, no trailing commas, 
 
 ## Deployment
 
-Security response headers (HSTS, nosniff, Referrer-Policy, etc.) are set in `firebase.json` `hosting.headers`; only the CSP stays as a `<meta>` in `src/app.html` (so it also applies in local dev). Meta `http-equiv` versions of the other headers are ignored by browsers.
+Security response headers (HSTS, nosniff, Referrer-Policy, etc.) are set in `firebase.json` `hosting.headers`; only the CSP stays as a `<meta>` in `src/app.html` (so it also applies in local dev). Meta `http-equiv` versions of the other headers are ignored by browsers. Caching is set there too: `no-cache` (revalidate) for everything, overridden by `public, max-age=31536000, immutable` for the content-hashed `/_app/immutable/**` files (the later rule wins). Keep dev-only hosts (`localhost`, `ws:`) out of the CSP: `'self'` already covers Vite's dev server and HMR socket.
 
 GitHub Actions (`.github/workflows/fb-deploy.yml`) runs on pushes to `master` and `claude-experiments` (ignoring README/CHANGELOG/.gitignore/.gitattributes changes): `npm ci` → lint → check → Vitest → Playwright (Chromium, no `--with-deps`) → build → deploy with `FirebaseExtended/action-hosting-deploy`.
 
 - `master` deploys to the live site, with GA.
 - **check-ga job** (`master` only, after deploy): fetches the live page (retrying until it shows the deployed commit, up to ~10 min) and looks for the gtag script with the secret's ID. If it's missing, it emits a warning and opens (or comments on) one `GA missing on live site` issue; when GA is back it closes that issue. It never fails the run for missing GA. Permissions: `issues: write` only, via `GITHUB_TOKEN`.
 - `claude-experiments` deploys to the `claude-experiments` preview channel, which expires 7 days after the last push. The URL is in the run's summary. Previews are built without the GA ID so they don't count as traffic, and the Playwright build never has it.
+- Actions are pinned to full commit SHAs (version in a trailing comment); `.github/dependabot.yml` proposes updates as PRs against `claude-experiments` (it only runs once that file is on `master`).
 - Node 24 (not 26: `firebase-tools` only supports Node 20-24, and `.npmrc` `engine-strict` makes that fatal), `ubuntu-24.04`, 15-minute timeout. Concurrent preview runs cancel each other; live runs are never cancelled.
 - To deploy, use the `deploy` skill (`.claude/skills/deploy/SKILL.md`): local checks, push `claude-experiments` (preview), confirm, fast-forward `master`, watch the run, check the live site.
 - Repo secrets: `GA_TRACKING_ID`, `FIREBASE_SERVICE_ACCOUNT`. Repo variable: `FIREBASE_PROJECT_ID` (a variable so the preview URL isn't masked; the ID is public anyway).

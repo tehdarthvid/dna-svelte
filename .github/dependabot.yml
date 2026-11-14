@@ -1,0 +1,13 @@
+# Keeps the SHA-pinned GitHub Actions current. PRs target claude-experiments (the
+# working branch); nothing reaches the deploy branch without a manual merge.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: claude-experiments
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns:
+          - '*'
