@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
+import { tick } from 'svelte';
 import { render, fireEvent } from '@testing-library/svelte';
 import { must } from '../test-utils.js';
 import Card from './Card.svelte';
@@ -65,6 +66,34 @@ describe('Card', () => {
 	it('uses the image as background for plain image cards', () => {
 		const { container } = render(Card, { params: base });
 		expect(must(container.querySelector('.card-bg')).getAttribute('style')).toContain(base.imgURL);
+	});
+
+	it('loads an image background only once the card is near the viewport', async () => {
+		/** @type {IntersectionObserverCallback[]} */
+		const observers = [];
+		vi.stubGlobal(
+			'IntersectionObserver',
+			class {
+				/** @param {IntersectionObserverCallback} cb */
+				constructor(cb) {
+					observers.push(cb);
+				}
+				observe() {}
+				disconnect() {}
+			}
+		);
+		try {
+			const { container } = render(Card, { params: base });
+			const bg = must(container.querySelector('.card-bg'));
+			expect(bg.getAttribute('style')).not.toContain(base.imgURL);
+
+			const entry = /** @type {IntersectionObserverEntry} */ ({ isIntersecting: true });
+			must(observers[0])([entry], /** @type {IntersectionObserver} */ ({}));
+			await tick();
+			expect(bg.getAttribute('style')).toContain(base.imgURL);
+		} finally {
+			vi.unstubAllGlobals();
+		}
 	});
 
 	it('tilts on mouse move and resets 1s after mouse leave', async () => {

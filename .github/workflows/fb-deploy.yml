@@ -75,6 +75,9 @@ jobs:
           projectId: ${{ vars.FIREBASE_PROJECT_ID }}
           channelId: ${{ github.ref == 'refs/heads/master' && 'live' || 'claude-experiments' }}
           expires: 7d
+          # pinned: the action defaults to firebase-tools@latest, run with the deploy key.
+          # Dependabot can't see this input, so bump it by hand (npm view firebase-tools version).
+          firebaseToolsVersion: 15.36.0
 
       - name: Summary
         run: echo "Deployed to ${{ steps.deploy.outputs.details_url }}" >> "$GITHUB_STEP_SUMMARY"

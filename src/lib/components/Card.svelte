@@ -17,6 +17,10 @@
 	const tY = $derived(mY * -40);
 
 	let isBgImageLoaded = $state(false);
+	// image backgrounds load only once the card is near the viewport
+	let isNearView = $state(false);
+	/** @type {HTMLElement | undefined} */
+	let wrapEl = $state();
 	/** @type {ReturnType<typeof setTimeout> | undefined} */
 	let mouseLeaveDelay;
 
@@ -25,7 +29,25 @@
 	 */
 
 	$effect(() => {
-		if (!params.vidURL && !isBgImageLoaded && params.imgURL) {
+		if (isNearView || !wrapEl) return;
+		if (typeof IntersectionObserver === 'undefined') {
+			isNearView = true;
+			return;
+		}
+		const io = new IntersectionObserver(
+			(entries) => {
+				if (entries.some((e) => e.isIntersecting)) {
+					isNearView = true;
+					io.disconnect();
+				}
+			},
+			{ rootMargin: '200px' }
+		);
+		io.observe(wrapEl);
+		return () => io.disconnect();
+	});
+	$effect(() => {
+		if (isNearView && !params.vidURL && !isBgImageLoaded && params.imgURL) {
 			const img = new Image();
 			img.onload = handleImageLoaded;
 			img.src = params.imgURL;
@@ -61,6 +83,7 @@
 </script>
 
 <div
+	bind:this={wrapEl}
 	role="img"
 	aria-label={params.title ? params.title : ''}
 	class="card-wrap"
@@ -108,8 +131,8 @@
 		{:else if null != params.imgURL}
 			<div
 				class={isBgImageLoaded ? 'card-bg card-bg__fade-in' : 'card-bg'}
-				style="transform: translateX({tX}px) translateY({tY}px);
-        background-image: url({params.imgURL})"
+				style="transform: translateX({tX}px) translateY({tY}px);"
+				style:background-image={isNearView ? `url("${params.imgURL}")` : undefined}
 			></div>
 		{/if}
 
