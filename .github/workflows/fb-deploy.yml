@@ -83,12 +83,13 @@ jobs:
         run: echo "Deployed to ${{ steps.deploy.outputs.details_url }}" >> "$GITHUB_STEP_SUMMARY"
 
   check-ga:
-    # Live deploys only (previews are built without GA). Never fails the run for
-    # missing GA: warns, and tracks it in one open issue that closes itself once GA is back.
+    # Live deploys only (previews are built without GA). Also checks every card image
+    # loads with the live Referer. Never fails the run for either: warns, and tracks each
+    # problem in its own open issue that closes itself once fixed.
     if: github.ref == 'refs/heads/master'
     needs: build-and-deploy
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
     permissions:
       issues: write
     env:
@@ -99,7 +100,13 @@ jobs:
       # because it looks like it may contain a secret
       SITE_URL: https://dna.darthvid.com/
       GA_ID: ${{ secrets.GA_TRACKING_ID }}
+      IMG_ISSUE_TITLE: Card images failing on live site
     steps:
+      # for deck.json, read by the image check
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
       - name: Check live page for GA tag
         run: |
           short="${GITHUB_SHA::7}"
@@ -140,4 +147,48 @@ jobs:
             gh issue comment "$issue" --body "Still missing. $body"
           else
             gh issue create --title "$ISSUE_TITLE" --body "$body"$'\n\n'"Check that the GA ID repo secret is set and that the build reads it. This issue closes itself once a deploy has GA again."
+          fi
+
+      # The only real image-load test: Vitest only checks URL format, and the e2e
+      # tests run on localhost, which the S3 bucket's Referer rule blocks. Runs even
+      # if the page check above skipped, since the images don't depend on the deploy.
+      - name: Check card images load with the live Referer
+        if: ${{ !cancelled() }}
+        run: |
+          run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          total=0
+          failed=''
+          while IFS=$'\t' read -r title kind url; do
+            total=$((total + 1))
+            res="$(curl -sS -o /dev/null --max-time 30 --retry 2 -H "Referer: $SITE_URL" \
+              -w '%{http_code} %{content_type}' "$url" 2>&1 || true)"
+            code="${res%% *}"
+            ctype="${res#* }"
+            if [ "$code" != 200 ] || [[ "$ctype" != image/* ]]; then
+              failed+="- $title ($kind): ${res:-no response} $url"$'\n'
+            fi
+          done < <(jq -r '.[] | .title as $t | (["full", .imgURL], ["thumb", .thumbURL])
+            | select(.[1] != null) | [$t, .[0], .[1]] | @tsv' src/lib/data/deck.json)
+          nfail="$(grep -c . <<<"$failed" || true)"
+          summary="$((total - nfail)) of $total card images (full-size + thumbnails) load with Referer $SITE_URL"
+          echo "$summary"
+          echo "$summary" >> "$GITHUB_STEP_SUMMARY"
+
+          issue="$(gh issue list --state open --limit 100 --json number,title \
+            --jq 'map(select(.title == env.IMG_ISSUE_TITLE)) | .[0].number // empty')"
+
+          if [ "$total" -gt 0 ] && [ "$nfail" -eq 0 ]; then
+            if [ -n "$issue" ]; then
+              gh issue close "$issue" --comment "All $total card images load again as of $GITHUB_SHA ($run_url)."
+            fi
+            exit 0
+          fi
+
+          echo "::warning::$summary"
+          printf '%s' "$failed"
+          body="$summary after deploying $GITHUB_SHA ($run_url). Failing (HTTP status, Content-Type):"$'\n\n'"$failed"
+          if [ -n "$issue" ]; then
+            gh issue comment "$issue" --body "Still failing. $body"
+          else
+            gh issue create --title "$IMG_ISSUE_TITLE" --body "$body"$'\n'"Check that each file is in the S3 bucket at that key, with an image Content-Type, and that the bucket policy still allows the site's Referer. This issue closes itself once every image loads."
           fi
