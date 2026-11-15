@@ -37,23 +37,43 @@ describe('Card', () => {
 		await fireEvent.dblClick(getByRole('img'));
 	});
 
-	it('renders a YouTube iframe when ytVideoID is set', () => {
+	it('plays YouTube cards through youtube-nocookie.com', async () => {
 		const { container } = render(Card, {
 			params: { ...base, ytVideoID: 'abc123' }
 		});
+		await tick();
 		const iframe = must(container.querySelector('iframe'));
-		expect(iframe.getAttribute('src')).toContain('https://www.youtube.com/embed/abc123');
+		expect(iframe.getAttribute('src')).toContain('https://www.youtube-nocookie.com/embed/abc123');
 	});
 
-	it('fades a YouTube card in only after its iframe loads', async () => {
+	it('fades a YouTube card in on its still frame, and shows the player once it loads', async () => {
 		const { container } = render(Card, {
 			params: { title: base.title, ytVideoID: 'abc123' }
 		});
+		await tick();
 		const bg = must(container.querySelector('.card-bg'));
+		const still = must(container.querySelector('img.yt-still'));
+		expect(still.getAttribute('src')).toBe('https://i.ytimg.com/vi_webp/abc123/hqdefault.webp');
 		expect(bg.classList.contains('card-bg__fade-in')).toBe(false);
 
-		await fireEvent.load(must(container.querySelector('iframe')));
+		await fireEvent.load(still);
 		expect(bg.classList.contains('card-bg__fade-in')).toBe(true);
+
+		const iframe = must(container.querySelector('iframe'));
+		expect(iframe.classList.contains('yt-pending')).toBe(true);
+		await fireEvent.load(iframe);
+		expect(iframe.classList.contains('yt-pending')).toBe(false);
+	});
+
+	it('keeps the YouTube still frame when data saver is on', async () => {
+		vi.stubGlobal('navigator', { ...navigator, connection: { saveData: true } });
+		const { container } = render(Card, {
+			params: { title: base.title, ytVideoID: 'abc123' }
+		});
+		await tick();
+		expect(container.querySelector('img.yt-still')).toBeTruthy();
+		expect(container.querySelector('iframe')).toBeNull();
+		vi.unstubAllGlobals();
 	});
 
 	it('renders a video element when vidURL is set', () => {
