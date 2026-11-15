@@ -8,6 +8,10 @@ const { version } = JSON.parse(readFileSync('./package.json', 'utf8'));
 const { version: svelteVersion } = createRequire(import.meta.url)('svelte/package.json');
 
 export default {
+	build: {
+		// keep font files as files: the CSP has no font-src data:, so inlined subsets would be blocked
+		assetsInlineLimit: (/** @type {string} */ file) => (/\.woff2?$/.test(file) ? false : undefined)
+	},
 	plugins: [sveltekit({ adapter: adapter() })],
 	define: {
 		__PKG_VERSION__: JSON.stringify(version),

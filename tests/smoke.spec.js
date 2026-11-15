@@ -36,3 +36,28 @@ test('double-clicking a card opens its image in a modal; Esc and click close it'
 	await dialog.click();
 	await expect(dialog).toHaveCount(0);
 });
+
+test('fonts are self-hosted and allowed by the CSP', async ({ page }) => {
+	// card images aren't what this checks; keep it offline
+	await page.route(/amazonaws\.com/, (route) => route.abort());
+	/** @type {string[]} */
+	const fontHosts = [];
+	/** @type {string[]} */
+	const cspErrors = [];
+	page.on('request', (r) => {
+		if (r.resourceType() === 'font' || /fonts\.(googleapis|gstatic)\.com/.test(r.url())) {
+			fontHosts.push(new URL(r.url()).host);
+		}
+	});
+	page.on('console', (m) => {
+		if (/Content Security Policy/.test(m.text())) cspErrors.push(m.text());
+	});
+	await page.goto('/');
+	await page.evaluate(() => document.fonts.ready);
+	await expect
+		.poll(() => page.evaluate(() => document.fonts.check('16px "Noto Sans JP"', '超電磁')))
+		.toBe(true);
+	expect(fontHosts.length).toBeGreaterThan(0);
+	expect(new Set(fontHosts)).toEqual(new Set([new URL(page.url()).host]));
+	expect(cspErrors).toEqual([]);
+});
