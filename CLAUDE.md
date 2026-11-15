@@ -6,6 +6,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Personal "influences DNA" page (https://dna.darthvid.com/), a SvelteKit 3 (Svelte 5 runes) + Vite + `@sveltejs/adapter-static` site built as a webdev learning exercise (earlier iterations were Vue/React; see README). Code is intentionally experimental/messy. Tests use Vitest (`npm test`); linting is Prettier + ESLint, type checking is svelte-check with JSDoc. The last Rollup-based version is tagged `pre-sveltekit-migration`.
 
+## Site purpose & design philosophy
+
+- A visualization of the media and things that shaped the owner. Content is stable: an occasional card added or removed.
+- Its main role is a testbed for tech stacks, automation, security and maintenance. Expect major changes to be stack swaps or presentation redesigns, not content work. Experiments are welcome here.
+- Favor low-maintenance automation, and keep card data (`deck.json`) and images (S3) portable between stacks.
+- `Card.svelte` is shared with `tehdarthvid.github.io` (darthvid.com), whose copy is the reference. That site aims for simple code and fast loads, so complexity added to `Card.svelte` for a dna experiment must not leak into it without flagging it.
+
 ## Commands
 
 - `npm install`
