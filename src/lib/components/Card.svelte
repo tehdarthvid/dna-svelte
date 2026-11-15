@@ -24,6 +24,14 @@
 	/** @type {ReturnType<typeof setTimeout> | undefined} */
 	let mouseLeaveDelay;
 
+	// YouTube cards: show the video's still frame first, and load the player only once the
+	// page has finished loading and the card is on screen. Data saver and reduced motion keep
+	// the still frame.
+	let isPageLoaded = $state(false);
+	let isMotionOK = $state(false);
+	let isPlayerReady = $state(false);
+	const playVideo = $derived(isNearView && isPageLoaded && isMotionOK);
+
 	/*
 	 * Svelte lifecycle handlers
 	 */
@@ -54,6 +62,19 @@
 		}
 	});
 	$effect(() => () => clearTimeout(mouseLeaveDelay));
+	$effect(() => {
+		if (null == params.ytVideoID) return;
+		const conn = /** @type {{ connection?: { saveData?: boolean } }} */ (navigator).connection;
+		const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+		isMotionOK = !conn?.saveData && !reduce;
+		if (document.readyState === 'complete') {
+			isPageLoaded = true;
+			return;
+		}
+		const onLoad = () => (isPageLoaded = true);
+		window.addEventListener('load', onLoad, { once: true });
+		return () => window.removeEventListener('load', onLoad);
+	});
 
 	/*
 	 * event handlers
@@ -98,20 +119,29 @@
 				class={isBgImageLoaded ? 'card-bg card-bg__fade-in' : 'card-bg'}
 				style="transform: translateX({tX}px) translateY({tY}px); "
 			>
-				<iframe
-					title={params.title ? params.title : ''}
-					class="center_video"
+				<img
+					class="center_video yt-still"
+					alt=""
 					width="560"
 					height="315"
 					loading="lazy"
+					decoding="async"
+					src="https://i.ytimg.com/vi_webp/{params.ytVideoID}/hqdefault.webp"
 					onload={handleImageLoaded}
-					src="https://www.youtube.com/embed/{params.ytVideoID}?rel=0&controls=0&autoplay=1&mute=1&loop=1&playlist={params.ytVideoID}"
-					frameborder="0"
-					allow="accelerometer; autoplay; encrypted-media; gyroscope;
-          picture-in-picture"
-					allowfullscreen
-				>
-				</iframe>
+				/>
+				{#if playVideo}
+					<iframe
+						title={params.title ? params.title : ''}
+						class={isPlayerReady ? 'center_video' : 'center_video yt-pending'}
+						width="560"
+						height="315"
+						onload={() => (isPlayerReady = true)}
+						src="https://www.youtube-nocookie.com/embed/{params.ytVideoID}?rel=0&controls=0&autoplay=1&mute=1&loop=1&playlist={params.ytVideoID}"
+						frameborder="0"
+						allow="autoplay; encrypted-media; picture-in-picture"
+					>
+					</iframe>
+				{/if}
 			</div>
 		{:else if null != params.vidURL}
 			<div
@@ -276,6 +306,13 @@
    * Center the video inside the card like the image verison. 
    * Otherwise, everything else rely on `card-bg`.
    */
+	.yt-still {
+		object-fit: cover;
+	}
+	/* the player stays invisible over the still frame until its iframe has loaded */
+	.yt-pending {
+		opacity: 0;
+	}
 	.center_video {
 		position: absolute;
 		top: 50%;
