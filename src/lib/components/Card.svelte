@@ -24,9 +24,9 @@
 	/** @type {ReturnType<typeof setTimeout> | undefined} */
 	let mouseLeaveDelay;
 
-	// YouTube cards: show the video's still frame first, and load the player only once the
-	// page has finished loading and the card is on screen. Data saver and reduced motion keep
-	// the still frame.
+	// Video cards (YouTube or a self-hosted loop): show a still frame first, and load the video
+	// only once the page has finished loading and the card is on screen. Data saver and reduced
+	// motion keep the still frame.
 	let isPageLoaded = $state(false);
 	let isMotionOK = $state(false);
 	let isPlayerReady = $state(false);
@@ -63,7 +63,7 @@
 	});
 	$effect(() => () => clearTimeout(mouseLeaveDelay));
 	$effect(() => {
-		if (null == params.ytVideoID) return;
+		if (null == params.ytVideoID && null == params.vidURL) return;
 		const conn = /** @type {{ connection?: { saveData?: boolean } }} */ (navigator).connection;
 		const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 		isMotionOK = !conn?.saveData && !reduce;
@@ -148,15 +148,31 @@
 				class={isBgImageLoaded ? 'card-bg card-bg__fade-in' : 'card-bg'}
 				style="transform: translateX({tX}px) translateY({tY}px); "
 			>
-				<video
-					class="center_video"
-					src={params.vidURL}
-					autoplay
-					loop
-					muted
-					onplaying={handleImageLoaded}
-				>
-				</video>
+				{#if null != params.imgURL}
+					<img
+						class="cover"
+						alt=""
+						loading="lazy"
+						decoding="async"
+						src={params.imgURL}
+						onload={handleImageLoaded}
+					/>
+				{/if}
+				{#if playVideo}
+					<video
+						class={isPlayerReady ? 'cover' : 'cover yt-pending'}
+						src={params.vidURL}
+						autoplay
+						loop
+						muted
+						playsinline
+						onplaying={() => {
+							isPlayerReady = true;
+							handleImageLoaded();
+						}}
+					>
+					</video>
+				{/if}
 			</div>
 		{:else if null != params.imgURL}
 			<div
@@ -309,7 +325,15 @@
 	.yt-still {
 		object-fit: cover;
 	}
-	/* the player stays invisible over the still frame until its iframe has loaded */
+	/* a self-hosted loop and its poster fill the card like an image background */
+	.cover {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	/* the player stays invisible over the still frame until it has loaded */
 	.yt-pending {
 		opacity: 0;
 	}
