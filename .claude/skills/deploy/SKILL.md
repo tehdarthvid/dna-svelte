@@ -1,6 +1,6 @@
 ---
 name: deploy
-description: Deploy this site to dna.darthvid.com. Checks claude-experiments locally, pushes it (CI deploys a preview), then after confirmation fast-forwards master, watches the live deploy and checks the live site. Use when the user asks to deploy, ship, release or publish changes.
+description: Deploy this site to dna.darthvid.com. Checks claude-experiments locally, pushes it (CI deploys a preview), then after confirmation merges it into master without the Claude-only files, watches the live deploy and checks the live site. Use when the user asks to deploy, ship, release or publish changes.
 ---
 
 # Deploy dna.darthvid.com
@@ -9,9 +9,10 @@ Deployment is CI-only (`.github/workflows/fb-deploy.yml`, Firebase Hosting). Pus
 
 ## Rules
 
-- Work happens on `claude-experiments`. `master` is only touched to deploy, and only as a fast-forward of `claude-experiments`.
+- Work happens on `claude-experiments`. `master` is only touched to deploy.
+- Claude-only files (`CLAUDE.md` anywhere, `.claude/`) stay on `claude-experiments` and never go to `master`. So `master` is never a fast-forward: each deploy is a merge commit without those paths.
 - Never push `master` unless the user asked for a deploy. Confirm before step 5 even if they said "deploy" earlier in the session, unless they said to go all the way.
-- Never force-push, and never merge or rebase to make `master` fit. If `master` has diverged, stop, show both sides and ask.
+- Never force-push or rebase. If the merge in step 5 conflicts on anything other than the Claude-only files, stop, show both sides and ask.
 - Do not push with failing checks. Report failures with the output.
 - If a push or fetch fails with an auth error, check memory for the SSH key to remind the user about. Do not load keys yourself.
 - Do not change the workflow's Node version to 26: `firebase-tools` only supports Node 20-24, and `.npmrc` `engine-strict` makes the deploy fail.
@@ -32,8 +33,24 @@ Deployment is CI-only (`.github/workflows/fb-deploy.yml`, Firebase Hosting). Pus
 
    If nothing was pushed (already up to date), use the most recent successful run for that commit. The preview URL is in the run summary (`gh run view "$id" --log | grep -o 'Deployed to https://[^ "]*'`). Give it to the user.
 
-4. **Confirm the deploy.** Show what will go live: `git log --oneline origin/master..claude-experiments`. If that's empty, there's nothing to deploy; say so and stop. Check `git log --oneline claude-experiments..origin/master` is empty; if not, `master` has diverged (see Rules). Ask the user to confirm, mentioning the preview URL so they can check it first.
-5. **Fast-forward `master`.** No checkout needed: `git push origin claude-experiments:master`. Git rejects it if it isn't a fast-forward; treat that as divergence and stop.
+4. **Confirm the deploy.** Show what will go live: `git diff --stat origin/master origin/claude-experiments -- . ':!**/CLAUDE.md' ':!.claude'` plus the commit list `git log --oneline origin/master..origin/claude-experiments`. If the diff is empty, there's nothing to deploy (Claude-only changes don't deploy); say so and stop. Ask the user to confirm, mentioning the preview URL so they can check it first.
+5. **Merge into `master` without the Claude-only files.**
+
+   ```sh
+   git fetch origin
+   git checkout -B deploy-tmp origin/master
+   git merge --no-ff --no-commit origin/claude-experiments   # a modify/delete conflict on CLAUDE.md is expected
+   git rm -rq --ignore-unmatch CLAUDE.md .claude
+   git ls-files -z '*CLAUDE.md' | xargs -0r git rm -q        # nested CLAUDE.md, if any
+   git status --short                                       # must show no other conflicts; if it does, stop and ask
+   git commit -m "Deploy claude-experiments to master (without Claude-only files)"
+   git diff --name-only origin/claude-experiments HEAD      # must list only Claude-only paths
+   git push origin HEAD:master
+   git checkout claude-experiments && git branch -D deploy-tmp
+   ```
+
+   Never merge `master` back into `claude-experiments` (it would delete the Claude-only files there), and never force-push.
+
 6. **Watch the live deploy** the same way as step 3 with `--branch master`. Every step must succeed.
 7. **Check the live site** (Firebase's CDN can lag a minute; retry before calling anything a failure):
    - `curl -sI https://dna.darthvid.com/`: HTTP 200, and the headers from `firebase.json`: `strict-transport-security`, `x-content-type-options: nosniff`, `referrer-policy`, `x-permitted-cross-domain-policies`.
@@ -43,7 +60,7 @@ Deployment is CI-only (`.github/workflows/fb-deploy.yml`, Firebase Hosting). Pus
      - There's a `gtag/js?id=G-` script. Don't hardcode or print the full ID.
      - `svelte v<version>` matches `node -p "require('svelte/package.json').version"`.
      - The number of `class="card-wrap` matches the number of entries in `src/lib/data/deck.json`.
-8. **Report** the commits deployed, the run, and each check's result. `master` and `claude-experiments` are now at the same commit.
+8. **Report** the commits deployed, the run, and each check's result. `master` now matches `claude-experiments` except for the Claude-only files.
 9. **Pending cleanup.** Check memory for repo secrets waiting to be deleted after successful deploys, and remind the user if they're due. Writing secrets is blocked for Claude, so the user runs the `gh secret delete` commands.
 
 ## Repo settings this relies on

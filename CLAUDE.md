@@ -58,7 +58,8 @@ GitHub Actions (`.github/workflows/fb-deploy.yml`) runs on pushes to `master` an
 - `claude-experiments` deploys to the `claude-experiments` preview channel, which expires 7 days after the last push. The URL is in the run's summary. Previews are built without the GA ID so they don't count as traffic, and the Playwright build never has it.
 - Actions are pinned to full commit SHAs (version in a trailing comment); `.github/dependabot.yml` proposes updates as PRs against `claude-experiments` (it only runs once that file is on `master`). The action's `firebaseToolsVersion` input is pinned too (it defaults to `latest`); Dependabot can't update it, so bump it by hand.
 - Node 24 (not 26: `firebase-tools` only supports Node 20-24, and `.npmrc` `engine-strict` makes that fatal), `ubuntu-24.04`, 15-minute timeout. Concurrent preview runs cancel each other; live runs are never cancelled.
-- To deploy, use the `deploy` skill (`.claude/skills/deploy/SKILL.md`): local checks, push `claude-experiments` (preview), confirm, fast-forward `master`, watch the run, check the live site.
+- To deploy, use the `deploy` skill (`.claude/skills/deploy/SKILL.md`): local checks, push `claude-experiments` (preview), confirm, merge into `master` without the Claude-only files, watch the run, check the live site.
+- Claude-only files (`CLAUDE.md` anywhere, `.claude/`) live only on `claude-experiments` and never go to `master`: a deploy merges `claude-experiments` into `master` with those paths removed. So `master` is never a fast-forward and is never merged back into `claude-experiments`. The workflow ignores pushes that only change these paths.
 - Repo secrets: `GA_TRACKING_ID`, `FIREBASE_SERVICE_ACCOUNT`. Repo variable: `FIREBASE_PROJECT_ID` (a variable so the preview URL isn't masked; the ID is public anyway).
 
 ## Known issues
