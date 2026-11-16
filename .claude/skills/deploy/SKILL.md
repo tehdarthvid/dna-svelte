@@ -14,13 +14,13 @@ Deployment is CI-only (`.github/workflows/fb-deploy.yml`, Firebase Hosting). Pus
 - Never push `master` unless the user asked for a deploy. Confirm before step 5 even if they said "deploy" earlier in the session, unless they said to go all the way.
 - Never force-push or rebase. If the merge in step 5 conflicts on anything other than the Claude-only files, stop, show both sides and ask.
 - Do not push with failing checks. Report failures with the output.
-- If a push or fetch fails with an auth error, check memory for the SSH key to remind the user about. Do not load keys yourself.
+- Git auth goes through the Bitwarden SSH agent via Windows `ssh.exe` (see the workspace `CLAUDE.md`, "Git auth"). With the vault locked, a push or pull waits for the user to approve a Bitwarden prompt, so a slow one isn't a failure: don't kill it, ask the user to check Bitwarden. If it fails outright, suspect a locked vault or a missing GitHub entry in `C:\Users\simoun\.ssh\known_hosts`. Do not load keys yourself.
 - Do not change the workflow's Node version to 26: `firebase-tools` only supports Node 20-24, and `.npmrc` `engine-strict` makes the deploy fail.
 
 ## Steps
 
 1. **Preflight.** `git branch --show-current` must be `claude-experiments` (switch if not). `git status` must be clean; if not, ask whether to commit. `git fetch origin`.
-2. **Local checks.** `npm run lint`, `npm run check`, `npm test`, `npm run test:e2e`. The user's shell exports placeholder `PUBLIC_*` values; that doesn't matter for these checks.
+2. **Local checks.** `npm run lint`, `npm run check`, `npm test`, `npm run test:e2e`. The user's shell exports placeholder `PUBLIC_*` values; that doesn't matter for these checks. Use Node 24 (the shell default). If every e2e test fails with "Executable doesn't exist", Playwright was bumped: run `npx playwright install chromium` and rerun.
 3. **Push `claude-experiments` and watch CI.** Find the run by commit, not "latest", since an older run may still be listed:
 
    ```sh
@@ -40,11 +40,12 @@ Deployment is CI-only (`.github/workflows/fb-deploy.yml`, Firebase Hosting). Pus
    git fetch origin
    git checkout -B deploy-tmp origin/master
    git merge --no-ff --no-commit origin/claude-experiments   # a modify/delete conflict on CLAUDE.md is expected
-   git rm -rq --ignore-unmatch CLAUDE.md .claude
-   git ls-files -z '*CLAUDE.md' | xargs -0r git rm -q        # nested CLAUDE.md, if any
+   git rm -rqf --ignore-unmatch CLAUDE.md .claude           # -f: the merge stages them, and plain rm refuses
+   git ls-files -z '*CLAUDE.md' | xargs -0r git rm -qf       # nested CLAUDE.md, if any
    git status --short                                       # must show no other conflicts; if it does, stop and ask
    git commit -m "Deploy claude-experiments to master (without Claude-only files)"
    git diff --name-only origin/claude-experiments HEAD      # must list only Claude-only paths
+   git ls-tree -r --name-only HEAD | grep -E 'CLAUDE\.md|^\.claude/'   # must print nothing
    git push origin HEAD:master
    git checkout claude-experiments && git branch -D deploy-tmp
    ```
