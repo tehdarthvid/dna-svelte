@@ -21,6 +21,9 @@ on:
       - 'CHANGELOG.md'
       - '.gitignore'
       - '.gitattributes'
+      # Claude-only files (they stay on claude-experiments, see CLAUDE.md)
+      - '**/CLAUDE.md'
+      - '.claude/**'
 
 permissions:
   contents: read
