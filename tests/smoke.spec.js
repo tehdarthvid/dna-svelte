@@ -61,3 +61,45 @@ test('fonts are self-hosted and allowed by the CSP', async ({ page }) => {
 	expect(new Set(fontHosts)).toEqual(new Set([new URL(page.url()).host]));
 	expect(cspErrors).toEqual([]);
 });
+
+test('CSP allows no inline scripts except SvelteKit-hashed ones, with no violations', async ({
+	page
+}) => {
+	// card images: serve a 1x1 PNG so they load (the bucket's Referer rule blocks localhost)
+	const png = Buffer.from(
+		'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=',
+		'base64'
+	);
+	await page.route(/amazonaws\.com/, (route) =>
+		route.fulfill({ contentType: 'image/png', body: png })
+	);
+	await page.addInitScript(() => {
+		/** @type {string[]} */
+		const v = [];
+		// @ts-ignore
+		window.__cspViolations = v;
+		document.addEventListener('securitypolicyviolation', (e) =>
+			v.push(`${e.violatedDirective} ${e.blockedURI}`)
+		);
+	});
+	await page.goto('/');
+	const csp = await page
+		.locator('meta[http-equiv="content-security-policy" i]')
+		.getAttribute('content');
+	const scriptSrc = csp?.split(';').find((d) => d.trim().startsWith('script-src')) ?? '';
+	expect(scriptSrc).toContain("'sha256-");
+	expect(scriptSrc).not.toContain("'unsafe-inline'");
+	// SvelteKit's own (hashed) inline startup script ran: it sets a __sveltekit_* global ...
+	await page.waitForFunction(() => Object.keys(window).some((k) => k.startsWith('__sveltekit_')));
+	// @ts-ignore
+	expect(await page.evaluate(() => window.__cspViolations)).toEqual([]);
+	// ... but an injected inline script is blocked
+	const ran = await page.evaluate(() => {
+		const s = document.createElement('script');
+		s.textContent = 'window.__injected = true';
+		document.head.append(s);
+		// @ts-ignore
+		return window.__injected === true;
+	});
+	expect(ran).toBe(false);
+});
