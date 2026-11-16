@@ -35,7 +35,7 @@ Title (must be unique, the data test enforces it), date (same style as the other
 ## Things that need no edit
 
 - The post-deploy image check counts URLs from `deck.json` itself (`imgURL` + `thumbURL` per card), so there's no hardcoded total. Expect `2 × <number of cards>` in that run's summary, and the `class="card-wrap` count in the deploy skill's live check to equal the number of cards.
-- CSP: no change while both images are in the bucket. If the user insists on an image elsewhere (CLAUDE.md says don't), that host must be added to `img-src` in `src/app.html`, and the Referer check would then test a host we don't control. Say so before doing it. A YouTube card would need `i.ytimg.com` in `img-src` (see the Card bullet in CLAUDE.md).
+- CSP: no change while both images are in the bucket. If the user insists on an image elsewhere (CLAUDE.md says don't), that host must be added to `img-src` in `vite.config.js` (the `sveltekit({ csp })` directives), and the Referer check would then test a host we don't control. Say so before doing it. A YouTube card would need `i.ytimg.com` in `img-src` (see the Card bullet in CLAUDE.md).
 - `Card.svelte` is never touched for a card change.
 
 ## Report
