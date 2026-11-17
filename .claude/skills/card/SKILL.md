@@ -9,7 +9,7 @@ Read the **Full-size images** and **Thumbnails** bullets in `CLAUDE.md` first: t
 
 ## Inputs to get from the user
 
-Title (must be unique, the data test enforces it), date (the release date or first airing's start–end, not when the user got into it; same style as the other cards, e.g. `4 Oct 1995 – 27 Mar 1996`), tags, optional `linkedCards`, and the image (a file they uploaded, or a URL). Ask only for what is missing. The deck order is the order each item became significant to the user, not by date: put the card where the user says, and if they didn't say, ask (don't guess from the date). Never move or sort other cards without their explicit approval.
+Title (must be unique, the data test enforces it), date (the release date or first airing's start–end, not when the user got into it; same style as the other cards, e.g. `4 Oct 1995 – 27 Mar 1996`), tags, optional `linkedCards`, and the image (a file they uploaded, or a URL): the earliest first-release image you can find, per the **Card images** bullet in `CLAUDE.md`. Ask only for what is missing. The deck order is the order each item became significant to the user, not by date: put the card where the user says, and if they didn't say, ask (don't guess from the date). Never move or sort other cards without their explicit approval.
 
 ## Add (or replace an image)
 
