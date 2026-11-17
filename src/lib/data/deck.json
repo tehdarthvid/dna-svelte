@@ -61,7 +61,7 @@
 		"date": "24 Sep 1991",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1991.09.24%20nevermind-bec5f0.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/nevermind-bec5f0.webp",
-		"tags": ["music"],
+		"tags": ["music", "guitar"],
 		"title": "Nevermind"
 	},
 	{
@@ -107,7 +107,7 @@
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1975.10.01%20Tao%20of%20Jeet%20Kune%20Do.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/tao-of-jeet-kune-do-1f3909.webp",
 		"linkedCards": ["Lee, Bruce"],
-		"tags": ["book", "martial arts"],
+		"tags": ["book", "martial arts", "pragmatism", "philosophy"],
 		"title": "Tao of Jeet Kune Do"
 	},
 	{
@@ -115,7 +115,7 @@
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1995.10.04%20%E3%80%8C%E6%96%B0%E4%B8%96%E7%B4%80%E3%82%A8%E3%83%B4%E3%82%A1%E3%83%B3%E3%82%B2%E3%83%AA%E3%82%AA%E3%83%B3%E3%80%8D%20Neon_Genesis_Evangelion_1995_poster.webp",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/card-eef290.webp",
 		"linkedCards": ["庵野 秀明", "貞本 義行"],
-		"tags": ["anime", "medium", "mecha"],
+		"tags": ["anime", "medium", "mecha", "not actually mecha"],
 		"title": "新世紀 エヴァンゲリオン"
 	},
 	{
@@ -130,7 +130,7 @@
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1998.03.31StarCraft-Box-807x1024.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/starcraft-95d799.webp",
 		"linkedCards": ["Blizzard"],
-		"tags": ["videogame", "RTS"],
+		"tags": ["videogame", "RTS", "philosophy"],
 		"title": "Starcraft"
 	},
 	{
@@ -152,7 +152,7 @@
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/2007.10.10%20team-fortress-2-53a3d1.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/team-fortress-2-53a3d1.webp",
 		"linkedCards": ["Valve"],
-		"tags": ["videogame", "FPS"],
+		"tags": ["videogame", "FPS", "team"],
 		"title": "Team Fortress 2"
 	},
 	{
@@ -189,7 +189,7 @@
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/2009.08.14%20REDLINE%20theatrical%20release%20poster.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/redline-b1b5ef.webp",
 		"linkedCards": ["Koike, Takeshi"],
-		"tags": ["anime", "medium", "movie", "film appreciation"],
+		"tags": ["anime", "medium", "movie", "film appreciation", "sakuga"],
 		"title": "Redline"
 	},
 	{
@@ -213,7 +213,7 @@
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/2011.01.07%20%E3%80%8C%E9%AD%94%E6%B3%95%E5%B0%91%E5%A5%B3%E3%81%BE%E3%81%A9%E3%81%8B%E2%98%86%E3%83%9E%E3%82%AE%E3%82%AB%E3%80%8D%204744f30136df1ad1e6c012b5a1cda5ea.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/card-ad9a9a.webp",
 		"linkedCards": ["Urobuchi, Gen"],
-		"tags": ["anime", "storytelling"],
+		"tags": ["anime", "storytelling", "symbolism", "sakuga"],
 		"title": "魔法少女まどか ☆ マギカ"
 	},
 	{
@@ -243,7 +243,8 @@
 			"medium",
 			"expressionist",
 			"character design",
-			"nuanced"
+			"nuanced",
+			"symbolism"
 		],
 		"title": "氷菓"
 	},
