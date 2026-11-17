@@ -312,5 +312,13 @@
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/junkfood-cinema-0ceac1.webp",
 		"tags": ["podcast", "movie", "film appreciation"],
 		"title": "Junkfood Cinema"
+	},
+	{
+		"date": "24 Feb 2025",
+		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/2025.02.24%20Claude%20Code%20research%20preview.png",
+		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/claude-code-771f69.webp",
+		"linkedCards": ["Anthropic"],
+		"tags": ["software engineering", "AI", "agentic coding"],
+		"title": "Claude Code"
 	}
 ]
