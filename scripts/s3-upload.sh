@@ -9,7 +9,6 @@
 #
 #   --dry-run  validate only (no AWS calls, no live check)
 #
-# C2PA manifests are stripped first (scripts/strip-c2pa.py), so S3 gets the original bytes.
 # Each file is written with `put-object --if-none-match '*'`, so an existing key is
 # never overwritten (the IAM role also denies writes without that header). If a key
 # already exists with the same bytes (a re-run), it counts as done; different bytes fail.
@@ -32,8 +31,6 @@ if [[ -n $(find "$ROOT" ! -type f ! -type d) ]]; then
 fi
 mapfile -d '' files < <(find "$ROOT" -type f -print0 | sort -z)
 ((${#files[@]})) || { echo "::error::$ROOT/ is empty"; exit 1; }
-# back to the original bytes (project-files copies carry a C2PA manifest), in place
-python3 -I scripts/strip-c2pa.py "${files[@]}"
 
 urlencode() { python3 -c 'import sys, urllib.parse; print(urllib.parse.quote(sys.argv[1], safe="/"))' "$1"; }
 
