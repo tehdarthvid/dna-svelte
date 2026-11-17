@@ -17,7 +17,7 @@
 		"date": "10 Sep 1977",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1977.09.10%20The%20All-New%20Superfriends%20Hour%20op%20title%20sc.png",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/the-all-new-super-friends-hour-2936ea.webp",
-		"tags": ["animation", "super hero", "team", "comic"],
+		"tags": ["animation", "superhero", "team", "comic"],
 		"title": "The All-New Super Friends Hour"
 	},
 	{
@@ -76,7 +76,7 @@
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1993.08.05%20magic-the-gathering-a5a224.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/magic-the-gathering-a5a224.webp",
 		"linkedCards": ["Richard Garfield"],
-		"tags": ["game", "rules", "cards", "medium"],
+		"tags": ["game", "trading card game", "game design", "rules", "medium"],
 		"title": "Magic: The Gathering"
 	},
 	{
@@ -144,7 +144,7 @@
 		"date": "Oct 1995",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1995.10%20Siedler%20von%20Catan%20Franckh%20Kosmos%20Erstausgabe.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/die-siedler-von-catan-0d5ae5.webp",
-		"tags": ["game", "medium", "rules"],
+		"tags": ["game", "game design", "medium", "rules"],
 		"title": "Die Siedler von Catan"
 	},
 	{
