@@ -24,7 +24,7 @@
 		"date": "3 Oct 1982 – 26 Jun 1983",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1982.10.03%20%E8%B6%85%E6%99%82%E7%A9%BA%E8%A6%81%E5%A1%9E%E3%83%9E%E3%82%AF%E3%83%AD%E3%82%B9%20sc.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/card-1066f9.webp",
-		"linkedCards": ["Kawamori, Shoji"],
+		"linkedCards": ["河森 正治"],
 		"tags": ["anime", "mecha"],
 		"title": "超時空要塞 マクロス"
 	},
@@ -53,7 +53,7 @@
 		"date": "Nov 1990",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1990.11%20Uncanny%20X-Men%20270.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/x-tinction-agenda-055fd2.webp",
-		"linkedCards": ["Lee, Jim"],
+		"linkedCards": ["Jim Lee"],
 		"tags": ["comic", "Marvel", "team"],
 		"title": "X-Tinction Agenda"
 	},
@@ -75,7 +75,7 @@
 		"date": "5 Aug 1993",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1993.08.05%20magic-the-gathering-a5a224.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/magic-the-gathering-a5a224.webp",
-		"linkedCards": ["Garfield, Richard"],
+		"linkedCards": ["Richard Garfield"],
 		"tags": ["game", "rules", "cards", "medium"],
 		"title": "Magic: The Gathering"
 	},
@@ -90,7 +90,7 @@
 		"date": "4 Oct 1988 – 23 May 1995",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1988.10.04%20Dragon%20Ball%20195%20title%20WSJ%201988-45%201032.png",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/z-a2b646.webp",
-		"linkedCards": ["Toriyama, Akira"],
+		"linkedCards": ["鳥山 明"],
 		"tags": ["manga", "anime", "medium", "draw", "panel flow"],
 		"title": "ドラゴンボールZ"
 	},
@@ -98,7 +98,7 @@
 		"date": "19 Aug 1987 – 6 Mar 1996",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1987.09%20%E3%80%8C%E3%82%89%E3%82%93%E3%81%BE%201_2%E3%80%8D%20%E9%80%B1%E5%88%8A%E5%B0%91%E5%B9%B4%E3%82%B5%E3%83%B3%E3%83%87%E3%83%BC%2036%209478482851_04bd05ff94_b.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/1-2-6a38fc.webp",
-		"linkedCards": ["Takahashi, Rumiko"],
+		"linkedCards": ["高橋 留美子"],
 		"tags": ["manga", "anime", "medium"],
 		"title": "らんま 1/2"
 	},
@@ -106,7 +106,7 @@
 		"date": "1 Oct 1975",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1975.10.01%20Tao%20of%20Jeet%20Kune%20Do.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/tao-of-jeet-kune-do-1f3909.webp",
-		"linkedCards": ["Lee, Bruce"],
+		"linkedCards": ["Bruce Lee"],
 		"tags": ["book", "martial arts", "pragmatism", "philosophy"],
 		"title": "Tao of Jeet Kune Do"
 	},
@@ -129,7 +129,7 @@
 		"date": "3 Mar 1998",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1998.03.31StarCraft-Box-807x1024.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/starcraft-95d799.webp",
-		"linkedCards": ["Blizzard"],
+		"linkedCards": ["Blizzard Entertainment"],
 		"tags": ["videogame", "RTS", "philosophy"],
 		"title": "Starcraft"
 	},
@@ -180,7 +180,7 @@
 		"date": "1 Aug 2009",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/2009.08.01%20%E3%82%B5%E3%83%9E%E3%83%BC%E3%82%A6%E3%82%A9%E3%83%BC%E3%82%B9%E3%82%99.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/card-810015.webp",
-		"linkedCards": ["Hosoda, Mamoru", "貞本 義行"],
+		"linkedCards": ["細田 守", "貞本 義行"],
 		"tags": ["movie", "anime"],
 		"title": "サマーウォーズ"
 	},
@@ -188,7 +188,7 @@
 		"date": "14 Aug 2009",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/2009.08.14%20REDLINE%20theatrical%20release%20poster.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/redline-b1b5ef.webp",
-		"linkedCards": ["Koike, Takeshi"],
+		"linkedCards": ["小池 健"],
 		"tags": ["anime", "medium", "movie", "film appreciation", "sakuga"],
 		"title": "Redline"
 	},
@@ -196,7 +196,7 @@
 		"date": "3 Jul 2009 – 25 Jun 2010",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/2009.07.03%20%E5%8C%96%E7%89%A9%E8%AA%9E%20anime.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/card-3b55ae.webp",
-		"linkedCards": ["Nissioisin"],
+		"linkedCards": ["西尾維新"],
 		"tags": ["anime", "light novel", "film appreciation", "expressionist", "symbolism"],
 		"title": "化物語"
 	},
@@ -204,7 +204,7 @@
 		"date": "Apr 2004",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/2004.04%20Dunny.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/dunny-cc85e3.webp",
-		"linkedCards": ["Kid Robot"],
+		"linkedCards": ["Kidrobot"],
 		"tags": ["vinyl", "designer toys"],
 		"title": "Dunny"
 	},
@@ -212,7 +212,7 @@
 		"date": "7 Jan 2011 – 21 Apr 2011",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/2011.01.07%20%E3%80%8C%E9%AD%94%E6%B3%95%E5%B0%91%E5%A5%B3%E3%81%BE%E3%81%A9%E3%81%8B%E2%98%86%E3%83%9E%E3%82%AE%E3%82%AB%E3%80%8D%204744f30136df1ad1e6c012b5a1cda5ea.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/card-ad9a9a.webp",
-		"linkedCards": ["Urobuchi, Gen"],
+		"linkedCards": ["虚淵 玄"],
 		"tags": ["anime", "storytelling", "symbolism", "sakuga"],
 		"title": "魔法少女まどか ☆ マギカ"
 	},
@@ -220,7 +220,7 @@
 		"date": "28 Sep 2011",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/2011.09.28%20the-binding-of-isaac-53e007.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/the-binding-of-isaac-53e007.webp",
-		"linkedCards": ["McMillen, Edmund"],
+		"linkedCards": ["Edmund McMillen"],
 		"tags": ["videogame", "game design", "expressionist"],
 		"title": "The Binding of Isaac"
 	},
@@ -236,7 +236,7 @@
 		"date": "22 Apr 2012 – 16 Sep 2012",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/2012.04.22%20%E3%80%8C%E6%B0%B7%E8%8F%93%E3%80%8D%20hyouka-573a0736365cb.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/card-3e30e6.webp",
-		"linkedCards": ["KyoAni"],
+		"linkedCards": ["京都アニメーション"],
 		"tags": [
 			"anime",
 			"film appreciation",
@@ -252,7 +252,7 @@
 		"date": "4 Oct 2013 – 28 Mar 2014",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/2013.10.04%20%E3%80%8C%E3%82%AD%E3%83%AB%E3%83%A9%E3%82%AD%E3%83%AB%E3%80%8D%20100051.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/card-57f94b.webp",
-		"linkedCards": ["Trigger", "すしお", "石崎 寿夫", "今石 洋之", "永井 豪"],
+		"linkedCards": ["TRIGGER", "すしお", "今石 洋之", "永井 豪"],
 		"tags": ["anime", "film appreciation", "medium", "draw", "expressionist", "character design"],
 		"title": "キルラキル"
 	},
@@ -281,7 +281,7 @@
 		"date": "24 May 2016",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/2016.05.24%20Overwatch.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/overwatch-07df09.webp",
-		"linkedCards": ["Blizzard"],
+		"linkedCards": ["Blizzard Entertainment"],
 		"tags": ["videogame", "FPS", "character design"],
 		"title": "Overwatch"
 	},
@@ -326,7 +326,7 @@
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1976%20Bob%20Morris%20The%20Original%20belt.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/powerlifting-belt-b92dad.webp",
 		"url": "https://www.bobsbeltsusa.com/belts",
-		"linkedCards": ["Morris, Bob"],
+		"linkedCards": ["Bob Morris"],
 		"tags": ["powerlifting", "deadlift", "strength", "pragmatism"],
 		"title": "Powerlifting belt"
 	},

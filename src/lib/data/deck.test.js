@@ -1,5 +1,16 @@
 import { describe, it, expect } from 'vitest';
 import deck from './deck.json';
+import aliases from './aliases.json';
+
+/**
+ * Loose form of a name, so near-duplicates ("Kid Robot" vs "Kidrobot") compare equal.
+ * @param {string} s
+ */
+const loose = (s) =>
+	s
+		.normalize('NFKC')
+		.toLowerCase()
+		.replace(/[\s.,'’・-]/g, '');
 
 /** @param {string} s */
 const isHttpsUrl = (s) => {
@@ -37,5 +48,46 @@ describe('deck.json', () => {
 	it('has unique titles', () => {
 		const titles = deck.map((c) => c.title);
 		expect(new Set(titles).size).toBe(titles.length);
+	});
+
+	// linkedCards name future cards: each is written as that card's title would be (CLAUDE.md,
+	// Linked cards). Other spellings live in aliases.json and must not be used as links.
+	describe('linkedCards and aliases.json', () => {
+		const links = [...new Set(deck.flatMap((c) => c.linkedCards ?? []))];
+		const names = new Set([...links, ...deck.map((c) => c.title)]);
+		const aliasMap = /** @type {Record<string, string>} */ (aliases);
+
+		it('has no blank, padded or repeated links on a card', () => {
+			for (const card of deck) {
+				const l = card.linkedCards ?? [];
+				l.forEach((t) => expect(t, card.title).toBe(t.trim()));
+				l.forEach((t) => expect(t, card.title).not.toBe(''));
+				expect(new Set(l).size, card.title).toBe(l.length);
+			}
+		});
+
+		it('uses the canonical name, not an alias', () => {
+			for (const t of links)
+				expect(aliasMap[t], `"${t}" is an alias of "${aliasMap[t]}"`).toBeUndefined();
+		});
+
+		it('maps every alias to a linked name or card title', () => {
+			for (const [a, t] of Object.entries(aliasMap)) {
+				expect(names.has(t), `alias "${a}" -> unknown "${t}"`).toBe(true);
+				expect(names.has(a), `alias "${a}" is also used as a name`).toBe(false);
+			}
+		});
+
+		it('has no near-duplicate names for different entities', () => {
+			/** @type {Map<string, string>} */
+			const seen = new Map();
+			const all = [...[...names].map((n) => [n, n]), ...Object.entries(aliasMap)];
+			for (const [name, entity] of all) {
+				const k = loose(name);
+				const prev = seen.get(k);
+				if (prev !== undefined) expect(prev, `"${name}" looks like "${prev}"`).toBe(entity);
+				else seen.set(k, entity);
+			}
+		});
 	});
 });

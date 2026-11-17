@@ -9,7 +9,7 @@ Read the **Full-size images** and **Thumbnails** bullets in `CLAUDE.md` first: t
 
 ## Inputs to get from the user
 
-Title (must be unique, the data test enforces it), date (the release date or first airing's start–end, not when the user got into it; same style as the other cards, e.g. `4 Oct 1995 – 27 Mar 1996`, `Oct 1995`, `1976`, `24 Feb 2025 (preview)`; see **Sourcing**), tags, optional `linkedCards`, and the image (a file they uploaded, or a URL): the earliest first-release image you can find, per the **Card images** bullet in `CLAUDE.md` and **Sourcing** below. Ask only for what is missing. The deck order is the order each item became significant to the user, not by date: put the card where the user says, and if they didn't say, ask (don't guess from the date). Never move or sort other cards without their explicit approval.
+Title (must be unique, the data test enforces it), date (the release date or first airing's start–end, not when the user got into it; same style as the other cards, e.g. `4 Oct 1995 – 27 Mar 1996`, `Oct 1995`, `1976`, `24 Feb 2025 (preview)`; see **Sourcing**), tags, optional `linkedCards` (people or studios, written as their own future card's title, with other spellings in `aliases.json`; see **Linked cards** in `CLAUDE.md`), and the image (a file they uploaded, or a URL): the earliest first-release image you can find, per the **Card images** bullet in `CLAUDE.md` and **Sourcing** below. Ask only for what is missing. The deck order is the order each item became significant to the user, not by date: put the card where the user says, and if they didn't say, ask (don't guess from the date). Never move or sort other cards without their explicit approval.
 
 ## Sourcing
 
@@ -50,7 +50,7 @@ Whatever the source, the image is cleaned before upload (step 1 below), and it i
 
 ## Remove
 
-1. Delete the entry from `deck.json` and any `linkedCards` that point to its title. Run the checks and push as above.
+1. Delete the entry from `deck.json`. Leave other cards' `linkedCards` alone, even ones naming this card's title: a link names an entity, card or not. Drop any `aliases.json` entries that pointed only to names this card used, if the data test says they no longer resolve. Run the checks and push as above.
 2. The S3 objects can stay (nothing links to them). Only if the user wants them gone, give a CloudShell `aws s3 rm` for the two exact keys, to run **after** the removal is live (deleting can't be undone unless bucket versioning is on), with the same `ls -la ~` + cleanup line if it ships as a file.
 
 ## Things that need no edit
