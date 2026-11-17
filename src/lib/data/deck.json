@@ -122,7 +122,7 @@
 		"date": "20 Mar 1997",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1997.03.20%20%E6%82%AA%E9%AD%94%E5%9F%8E%20%E3%83%88%E3%82%99%E3%83%A9%E3%82%AD%E3%83%A5%E3%83%A9%EF%BC%B8%E6%9C%88%E3%81%AE%E5%A4%9C%E6%83%B3%E6%9B%B2.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/x-d1f128.webp",
-		"tags": ["videogame", "platformer"],
+		"tags": ["videogame", "platformer", "metroidvania"],
 		"title": "悪魔城 ドラキュラＸ 月下の夜想曲"
 	},
 	{
@@ -282,7 +282,7 @@
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/2016.05.24%20Overwatch.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/overwatch-07df09.webp",
 		"linkedCards": ["Blizzard Entertainment"],
-		"tags": ["videogame", "FPS", "character design"],
+		"tags": ["videogame", "FPS", "hero shooter", "character design"],
 		"title": "Overwatch"
 	},
 	{
