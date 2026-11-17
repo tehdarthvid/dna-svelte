@@ -21,6 +21,8 @@ describe('deck.json', () => {
 		expect(card.title.trim()).not.toBe('');
 		expect(card.date).toBeTypeOf('string');
 		expect(card.date.trim()).not.toBe('');
+		// a range uses a spaced en dash (CLAUDE.md, Card dates): no hyphens or other dashes
+		expect(card.date).not.toMatch(/\d\s*[-\u2010-\u2012\u2014\u2015\u2212\u301c\uff0d]\s*\d/);
 		expect(isHttpsUrl(card.imgURL)).toBe(true);
 		if (card.thumbURL !== undefined) expect(isHttpsUrl(card.thumbURL)).toBe(true);
 		if ('url' in card) expect(isHttpsUrl(/** @type {any} */ (card).url)).toBe(true);
