@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, fireEvent } from '@testing-library/svelte';
 import { must } from '../test-utils.js';
 import Deck from './Deck.svelte';
@@ -29,5 +29,20 @@ describe('Deck', () => {
 
 		await fireEvent.click(dialog);
 		expect(container.querySelector('dialog')).toBeNull();
+	});
+
+	it('opens a card with a url in a new tab instead of the modal', async () => {
+		const i = deckData.findIndex((c) => 'url' in c && c.url);
+		if (i < 0) return; // no card uses url today
+		const spy = vi.spyOn(window, 'open').mockImplementation(() => null);
+		const { getAllByRole, container } = render(Deck);
+		await fireEvent.dblClick(getAllByRole('img')[i]);
+		expect(spy).toHaveBeenCalledWith(
+			/** @type {any} */ (deckData[i]).url,
+			'_blank',
+			'noopener,noreferrer'
+		);
+		expect(container.querySelector('dialog')).toBeNull();
+		spy.mockRestore();
 	});
 });
