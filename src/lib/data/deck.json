@@ -76,7 +76,7 @@
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1993.08.05%20magic-the-gathering-a5a224.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/magic-the-gathering-a5a224.webp",
 		"linkedCards": ["Richard Garfield"],
-		"tags": ["game", "trading card game", "game design", "rules", "medium"],
+		"tags": ["game", "TCG", "game design", "rules", "medium"],
 		"title": "Magic: The Gathering"
 	},
 	{
@@ -144,7 +144,7 @@
 		"date": "Oct 1995",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1995.10%20Siedler%20von%20Catan%20Franckh%20Kosmos%20Erstausgabe.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/die-siedler-von-catan-0d5ae5.webp",
-		"tags": ["game", "game design", "medium", "rules"],
+		"tags": ["game", "board game", "game design", "medium", "rules"],
 		"title": "Die Siedler von Catan"
 	},
 	{
@@ -221,7 +221,7 @@
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/2011.09.28%20the-binding-of-isaac-53e007.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/the-binding-of-isaac-53e007.webp",
 		"linkedCards": ["Edmund McMillen"],
-		"tags": ["videogame", "game design", "expressionist"],
+		"tags": ["videogame", "roguelike", "game design", "expressionist"],
 		"title": "The Binding of Isaac"
 	},
 	{
