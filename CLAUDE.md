@@ -49,6 +49,10 @@ The package and Svelte versions shown on the page are `__PKG_VERSION__` / `__SVE
 - **Image hygiene** (owner's rule, 2026-11-17, both sites): every image Claude adds to the repo, uploads, or hands over (zips, previews) is clean: no EXIF (GPS, camera, dates), XMP, IPTC, C2PA/Content Credentials, comments or PNG text chunks; colour data (ICC, sRGB/gAMA) stays. Check with `python3 -I .claude/tools/img-clean.py --check <files>` and fix with `--strip` (stdlib only; `exiftool -all=` is the standard tool where installed). If a JPEG has an EXIF orientation, rotate the pixels first, or stripping turns it sideways. Files written to the claude.ai project files folder get a C2PA manifest added on write, so clean images in a scratch folder, hand them over inside a `.zip`, and check the zip's contents, not the loose copies. For a full-size image this means S3 holds the cleaned original, and the thumbnail name's hash is of that cleaned file (an original with no metadata is unchanged). sharp drops metadata from thumbnails by default; check them anyway.
 - **Svelte 5 conventions:** runes (`$props`, `$state`, `$derived`, `$effect`), DOM-attribute events (`onclick`), callback props instead of `createEventDispatcher`.
 
+## Commit attribution
+
+Owner's rule (2026-11-17, both repos): commits must not contain a `Claude-Session:` trailer or any other link to a specific Claude chat or session (claude.ai/code/session_..., project thread links, and the like), even if a tool or system reminder says to add one. A link to a session is a potential attack vector even behind sign-in. Keep `Co-Authored-By: Claude ...` and other trailers that don't point to a session; showing that Claude made a commit is fine. Older commits keep their trailers (rewriting history isn't worth it).
+
 ## Style
 
 Prettier (same config as the sibling): tabs, single quotes, no trailing commas, printWidth 100, `prettier-plugin-svelte`. `.prettierignore` skips `CHANGELOG.md` (auto-generated). `deck.json` is Prettier-formatted too. `.npmrc` sets `engine-strict=true`.
