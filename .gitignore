@@ -8,6 +8,3 @@ node_modules
 vite.config.js.timestamp-*
 /test-results
 /playwright-report
-
-# card images staged for the s3-upload workflow; committed only on s3-upload/* branches (git add -f)
-/.s3-upload/
