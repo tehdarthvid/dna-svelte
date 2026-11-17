@@ -4,7 +4,7 @@ Removes: EXIF (incl. GPS, camera, dates), XMP, IPTC/Photoshop, C2PA/JUMBF Conten
 Credentials, comments, text chunks, timestamps, and SVG <metadata>/comments/editor data.
 Keeps what affects rendering: ICC colour profiles, PNG sRGB/gAMA/cHRM/pHYs, image data.
 JPEG EXIF orientation is NOT applied: if a photo relies on it, rotate it first
-(check: --check prints 'orientation' when the EXIF has one).
+(--check prints 'orientation=N' when it isn't 1).
 
 Usage:
   python3 -I .claude/tools/img-clean.py --check FILE...   exit 1 if any file has metadata
@@ -19,9 +19,27 @@ import struct
 import sys
 
 JPEG_DROP = {0xE1: 'EXIF/XMP', 0xED: 'IPTC/Photoshop', 0xEB: 'C2PA/JUMBF', 0xFE: 'comment'}
-JPEG_DROP.update({m: f'APP{m - 0xE0}' for m in range(0xE3, 0xF0) if m not in JPEG_DROP})
+# APP2 (ICC profile) and APP14 (Adobe colour transform) affect rendering, so they stay
+JPEG_DROP.update({m: f'APP{m - 0xE0}' for m in range(0xE3, 0xF0) if m not in JPEG_DROP and m != 0xEE})
 PNG_DROP = {b'tEXt', b'zTXt', b'iTXt', b'eXIf', b'tIME', b'caBX'}
 WEBP_DROP = {b'EXIF', b'XMP ', b'C2PA'}
+
+
+def orientation(seg):
+	"""EXIF Orientation (tag 0x0112) from an APP1 segment, 1 (normal) if absent."""
+	if seg[4:10] != b'Exif\x00\x00':
+		return 1
+	t = seg[10:]
+	e = '<' if t[:2] == b'II' else '>'
+	try:
+		ifd = struct.unpack(e + 'I', t[4:8])[0]
+		for k in range(struct.unpack(e + 'H', t[ifd : ifd + 2])[0]):
+			o = ifd + 2 + 12 * k
+			if struct.unpack(e + 'H', t[o : o + 2])[0] == 0x0112:
+				return struct.unpack(e + 'H', t[o + 8 : o + 10])[0]
+	except struct.error:
+		pass
+	return 1
 
 
 def jpeg(d):
@@ -36,8 +54,9 @@ def jpeg(d):
 		seg = d[i : i + 2 + n]
 		if m in JPEG_DROP:
 			found.append(JPEG_DROP[m])
-			if m == 0xE1 and (b'\x01\x12\x00\x03' in seg[:400] or b'\x12\x01\x03\x00' in seg[:400]):
-				found.append('orientation')
+			o = orientation(seg) if m == 0xE1 else 1
+			if o != 1:
+				found.append(f'orientation={o}')
 		else:
 			out += seg
 		i += 2 + n
