@@ -1,11 +1,11 @@
 ---
 name: card
-description: Add, replace or remove a card on dna.darthvid.com. Makes the full-size image and 480x640 WebP thumbnail for the S3 bucket, a CloudShell upload script (with a cleanup command) for the user to run, and the deck.json change. Use when the user asks to add, change, swap the image of, or remove a dna card.
+description: Add, replace or remove a card on dna.darthvid.com. Makes the full-size image and 480x640 WebP thumbnail, uploads them to the S3 bucket through the s3-upload workflow (CloudShell script as fallback), and makes the deck.json change. Use when the user asks to add, change, swap the image of, or remove a dna card.
 ---
 
 # Add or remove a dna card
 
-Read the **Full-size images** and **Thumbnails** bullets in `CLAUDE.md` first: they are the recipe (S3 layout, formats, headers). This skill is the order of work around them. Card images are never committed; they live only in the S3 bucket, and Claude has no AWS credentials, so the user uploads them from AWS CloudShell.
+Read the **Full-size images** and **Thumbnails** bullets in `CLAUDE.md` first: they are the recipe (S3 layout, formats, headers). This skill is the order of work around them. Card images are never committed to a kept branch; they live only in the S3 bucket. Claude has no AWS credentials: the `s3-upload` workflow uploads them (**Card image uploads** in `CLAUDE.md`), and AWS CloudShell is the fallback.
 
 ## Inputs to get from the user
 
@@ -20,17 +20,21 @@ Title (must be unique, the data test enforces it), date (the release date or fir
    - Both are cached `immutable` for a year, so a **replaced** image must get a new key (new hash, or a changed name), never an overwrite.
 3. **Thumbnail.** sharp, in the scratch folder (`npm i --prefix <scratch> sharp`; don't add it to the repo): `resize(480, 640, { fit: 'cover' })`, `.webp({ quality: 68 })`. Look at the result: if `cover` cropped off the subject, tell the user and offer a `position` (e.g. `'top'`).
 4. **deck.json.** Add the entry with `imgURL` and `thumbURL` as bucket-subdomain URLs (copy the host from an existing card), the key percent-encoded (spaces as `%20`, non-ASCII as UTF-8 `%XX`, like the existing entries). Run `npx prettier --write src/lib/data/deck.json`.
-5. **Upload package** in `/mnt/project-files/dna-card-<slug>/` (`<slug>` from step 2), plus a `.zip` of that folder, since CloudShell's "Upload file" takes one file:
+5. **Upload (workflow).** Skip step 6. If the repo variable `AWS_S3_UPLOAD_ROLE_ARN` is set (the variable list in a run's log, or ask the user once; then save that fact to project memory):
+   - Copy both files to `.s3-upload/ditim/full/<name>` and `.s3-upload/ditim/thumbs/<name>` (gitignored), and run `bash scripts/s3-upload.sh --dry-run`. It must print `ok` for both; a warning means the key doesn't match a `deck.json` URL, so fix one or the other.
+   - Commit the card on `claude-experiments` first (steps 7 and 8), then: `git switch -c s3-upload/<slug> && git add -f .s3-upload && git commit -m 'stage <slug> images' && git push -u origin s3-upload/<slug>`, then `git switch claude-experiments` and `rm -rf .s3-upload`. Never push `.s3-upload/` on `claude-experiments`.
+   - Watch the "Upload card images to S3" run. Success: its summary lists `200 image/...` for each URL and the branch is gone (`git ls-remote origin s3-upload/<slug>` prints nothing). If it's waiting for approval, the user has to approve it in the Actions tab: tell them. Failure: the branch stays; read the log, fix, push again (an identical re-upload counts as done), or delete the branch with `git push origin --delete s3-upload/<slug>`. `already exists with different content` means that key is taken: pick a new key, never ask for an overwrite.
+6. **Upload (CloudShell fallback)**, only when the workflow isn't set up or can't do it (deleting or overwriting objects): an upload package in `/mnt/project-files/dna-card-<slug>/` (`<slug>` from step 2), plus a `.zip` of that folder, since CloudShell's "Upload file" takes one file:
    - the two image files;
    - `upload.sh`, modeled on `dna-thumbs/upload.sh` in the project files: `set -euo pipefail`; one `aws s3 cp` per file with its exact `--content-type` (`image/jpeg`, `image/png`, `image/webp`, `image/svg+xml`, ...) and `--cache-control 'public, max-age=31536000, immutable'`; then a `curl -sS -o /dev/null -w '%{http_code} %{content_type}\n' -H 'Referer: https://dna.darthvid.com/'` of both new URLs (expect `200 image/...`).
    - The steps you give the user: upload the zip, `unzip dna-card-<slug>.zip && bash dna-card-<slug>/upload.sh`, then **always** the cleanup: "run `ls -la ~` first, then `rm -rf ~/dna-card-<slug> ~/dna-card-<slug>.zip`". CloudShell's home persists (1 GB per region).
-6. **Checks:** `npm run lint`, `npm run check`, `npm test`, `npm run test:e2e`. None of them load the S3 images (localhost fails the bucket's Referer rule), so look at the thumbnail yourself and say that the live load is still unchecked.
-7. **Commit and push `claude-experiments`** (this deploys only the preview channel). Don't deploy: going live goes through the `deploy` skill with the user's approval, and **only after they've run `upload.sh`**, or the post-deploy image check opens a `Card images failing on live site` issue.
+7. **Checks:** `npm run lint`, `npm run check`, `npm test`, `npm run test:e2e`. None of them load the S3 images (localhost fails the bucket's Referer rule), so look at the thumbnail yourself and say that the live load is still unchecked.
+8. **Commit and push `claude-experiments`** (this deploys only the preview channel). Don't deploy: going live goes through the `deploy` skill with the user's approval, and **only after the images are uploaded** (workflow run green, or the user ran `upload.sh`), or the post-deploy image check opens a `Card images failing on live site` issue.
 
 ## Remove
 
 1. Delete the entry from `deck.json` and any `linkedCards` that point to its title. Run the checks and push as above.
-2. The S3 objects can stay (nothing links to them). Only if the user wants them gone, give a CloudShell `aws s3 rm` for the two exact keys, to run **after** the removal is live (deleting can't be undone unless bucket versioning is on), with the same `ls -la ~` + cleanup line if it ships as a file.
+2. The S3 objects can stay (nothing links to them). The upload role can't delete. Only if the user wants them gone, give a CloudShell `aws s3 rm` for the two exact keys, to run **after** the removal is live (deleting can't be undone unless bucket versioning is on), with the same `ls -la ~` + cleanup line if it ships as a file.
 
 ## Things that need no edit
 
@@ -40,4 +44,4 @@ Title (must be unique, the data test enforces it), date (the release date or fir
 
 ## Report
 
-Card title, where it sits in the deck, the two S3 keys, the attached zip and the user's CloudShell steps (upload, then cleanup), the checks run, and the preview URL from the run summary as a clickable link. Say that it is not live yet.
+Card title, where it sits in the deck, the two S3 keys, how they were uploaded (the workflow run link, or the attached zip and the user's CloudShell steps with cleanup), the checks run, and the preview URL from the run summary as a clickable link. Say that it is not live yet.
