@@ -104,6 +104,7 @@ jobs:
       SITE_URL: https://dna.darthvid.com/
       GA_ID: ${{ secrets.GA_TRACKING_ID }}
       IMG_ISSUE_TITLE: Card images failing on live site
+      META_ISSUE_TITLE: Card images with metadata on live site
     steps:
       # for deck.json, read by the image check
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -155,43 +156,67 @@ jobs:
       # The only real image-load test: Vitest only checks URL format, and the e2e
       # tests run on localhost, which the S3 bucket's Referer rule blocks. Runs even
       # if the page check above skipped, since the images don't depend on the deploy.
-      - name: Check card images load with the live Referer
+      # Each image that loads is also checked for metadata (EXIF/GPS, XMP, IPTC, C2PA,
+      # comments, PNG text; colour data is fine) with scripts/img-clean.py, the same
+      # tool used to clean them before upload (CLAUDE.md, Image hygiene).
+      - name: Check card images load with the live Referer and carry no metadata
         if: ${{ !cancelled() }}
         run: |
           run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          img="$RUNNER_TEMP/card-image"
           total=0
           failed=''
+          dirty=''
           while IFS=$'\t' read -r title kind url; do
             total=$((total + 1))
-            res="$(curl -sS -o /dev/null --max-time 30 --retry 2 -H "Referer: $SITE_URL" \
+            rm -f "$img"
+            res="$(curl -sS -o "$img" --max-time 30 --retry 2 -H "Referer: $SITE_URL" \
               -w '%{http_code} %{content_type}' "$url" 2>&1 || true)"
             code="${res%% *}"
             ctype="${res#* }"
             if [ "$code" != 200 ] || [[ "$ctype" != image/* ]]; then
               failed+="- $title ($kind): ${res:-no response} $url"$'\n'
+            elif ! out="$(python3 -I scripts/img-clean.py --check "$img")"; then
+              # "DIRTY ['EXIF/XMP', 'C2PA/JUMBF']: <path>" -> the bracketed list
+              found="${out#DIRTY }"
+              dirty+="- $title ($kind): ${found%%:*} $url"$'\n'
             fi
           done < <(jq -r '.[] | .title as $t | (["full", .imgURL], ["thumb", .thumbURL])
             | select(.[1] != null) | [$t, .[0], .[1]] | @tsv' src/lib/data/deck.json)
           nfail="$(grep -c . <<<"$failed" || true)"
-          summary="$((total - nfail)) of $total card images (full-size + thumbnails) load with Referer $SITE_URL"
-          echo "$summary"
-          echo "$summary" >> "$GITHUB_STEP_SUMMARY"
+          ndirty="$(grep -c . <<<"$dirty" || true)"
+          loaded=$((total - nfail))
+          summary="$loaded of $total card images (full-size + thumbnails) load with Referer $SITE_URL"
+          meta_summary="$((loaded - ndirty)) of $loaded loaded card images carry no metadata"
+          printf '%s\n' "$summary" "$meta_summary" | tee -a "$GITHUB_STEP_SUMMARY"
 
-          issue="$(gh issue list --state open --limit 100 --json number,title \
-            --jq 'map(select(.title == env.IMG_ISSUE_TITLE)) | .[0].number // empty')"
-
-          if [ "$total" -gt 0 ] && [ "$nfail" -eq 0 ]; then
-            if [ -n "$issue" ]; then
-              gh issue close "$issue" --comment "All $total card images load again as of $GITHUB_SHA ($run_url)."
+          # track <issue title> <problem count> <list> <summary> <list label> <fix hint> <all-clear
+          # comment>: one open issue per problem, commented while it lasts, closed once it's gone
+          track() {
+            local issue
+            issue="$(T="$1" gh issue list --state open --limit 100 --json number,title \
+              --jq 'map(select(.title == env.T)) | .[0].number // empty')"
+            if [ "$total" -gt 0 ] && [ "$2" -eq 0 ]; then
+              if [ -n "$issue" ]; then gh issue close "$issue" --comment "$7"; fi
+              return
             fi
-            exit 0
-          fi
+            echo "::warning::$4"
+            printf '%s' "$3"
+            local body="$4 after deploying $GITHUB_SHA ($run_url). $5:"$'\n\n'"$3"
+            if [ -n "$issue" ]; then
+              gh issue comment "$issue" --body "Still the case. $body"
+            else
+              gh issue create --title "$1" --body "$body"$'\n'"$6 This issue closes itself once that's fixed."
+            fi
+          }
 
-          echo "::warning::$summary"
-          printf '%s' "$failed"
-          body="$summary after deploying $GITHUB_SHA ($run_url). Failing (HTTP status, Content-Type):"$'\n\n'"$failed"
-          if [ -n "$issue" ]; then
-            gh issue comment "$issue" --body "Still failing. $body"
-          else
-            gh issue create --title "$IMG_ISSUE_TITLE" --body "$body"$'\n'"Check that each file is in the S3 bucket at that key, with an image Content-Type, and that the bucket policy still allows the site's Referer. This issue closes itself once every image loads."
+          track "$IMG_ISSUE_TITLE" "$nfail" "$failed" "$summary" "Failing (HTTP status, Content-Type)" \
+            "Check that each file is in the S3 bucket at that key, with an image Content-Type, and that the bucket policy still allows the site's Referer." \
+            "All $total card images load again as of $GITHUB_SHA ($run_url)."
+          # Images that didn't load weren't checked, so while some fail and none of the
+          # rest has metadata, leave any metadata issue as it is (neither open nor close).
+          if [ "$ndirty" -gt 0 ] || { [ "$total" -gt 0 ] && [ "$nfail" -eq 0 ]; }; then
+            track "$META_ISSUE_TITLE" "$ndirty" "$dirty" "$meta_summary" "With metadata" \
+              "Strip it with \`python3 -I scripts/img-clean.py --strip <file>\` (rotate first if it reports an orientation), check the result, and upload it again to the same key from CloudShell, as in the 2026-11-17 clean-up." \
+              "All $total card images are metadata-free again as of $GITHUB_SHA ($run_url)."
           fi

@@ -7,8 +7,8 @@ JPEG EXIF orientation is NOT applied: if a photo relies on it, rotate it first
 (--check prints 'orientation=N' when it isn't 1).
 
 Usage:
-  python3 -I .claude/tools/img-clean.py --check FILE...   exit 1 if any file has metadata
-  python3 -I .claude/tools/img-clean.py --strip FILE...   rewrite in place, then re-check
+  python3 -I scripts/img-clean.py --check FILE...   exit 1 if any file has metadata
+  python3 -I scripts/img-clean.py --strip FILE...   rewrite in place, then re-check
 
 Files written to the claude.ai project files folder get a C2PA manifest added on
 write, so clean in a scratch folder and hand images over inside a .zip.
