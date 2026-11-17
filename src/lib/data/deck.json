@@ -3,7 +3,7 @@
 		"date": "25 May 1977",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1977.05.25%20Star%20Wars%20style-A%2077-21-0.jpeg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/star-wars-289e87.webp",
-		"tags": ["movie", "film appreciation", "fantasy", "space western", "star wars", "medium"],
+		"tags": ["movie", "film appreciation", "fantasy", "space western", "medium"],
 		"title": "Star Wars"
 	},
 	{
@@ -39,7 +39,7 @@
 		"date": "15 Jul 1983",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1983.07.15%20famicom%20ad.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/card-84f449.webp",
-		"tags": ["videogames", "hardware", "retro", "music", "pixels", "software engineering"],
+		"tags": ["videogame", "hardware", "retro", "music", "pixels", "software engineering"],
 		"title": "ファミリー コンピュータ"
 	},
 	{
@@ -68,7 +68,7 @@
 		"date": "5 Sep 1992 – 15 Sep 1995",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1992.09.05%20batman-the-animated-series-2349e7.png",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/batman-the-animated-series-2349e7.webp",
-		"tags": ["animation", "Batman", "clarity"],
+		"tags": ["animation", "clarity"],
 		"title": "Batman: The Animated Series"
 	},
 	{
@@ -144,7 +144,7 @@
 		"date": "Oct 1995",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1995.10%20Siedler%20von%20Catan%20Franckh%20Kosmos%20Erstausgabe.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/die-siedler-von-catan-0d5ae5.webp",
-		"tags": ["games", "medium", "rules"],
+		"tags": ["game", "medium", "rules"],
 		"title": "Die Siedler von Catan"
 	},
 	{
