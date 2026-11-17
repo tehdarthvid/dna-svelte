@@ -83,7 +83,7 @@
 		"date": "23 Feb 1994",
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1994.02.23%20super-street-fighter-ii-x-grand-master-challenge-3ca974.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/super-street-fighter-ii-x-grand-master-challenge-3ca974.webp",
-		"tags": ["videogame", "fighting game"],
+		"tags": ["videogame", "fighting game", "martial arts"],
 		"title": "Super Street Fighter II X: Grand Master Challenge"
 	},
 	{
@@ -91,7 +91,7 @@
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1988.10.04%20Dragon%20Ball%20195%20title%20WSJ%201988-45%201032.png",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/z-a2b646.webp",
 		"linkedCards": ["鳥山 明"],
-		"tags": ["manga", "anime", "medium", "art style", "panel flow"],
+		"tags": ["manga", "anime", "medium", "art style", "panel flow", "martial arts"],
 		"title": "ドラゴンボールZ"
 	},
 	{
@@ -99,7 +99,7 @@
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1987.09%20%E3%80%8C%E3%82%89%E3%82%93%E3%81%BE%201_2%E3%80%8D%20%E9%80%B1%E5%88%8A%E5%B0%91%E5%B9%B4%E3%82%B5%E3%83%B3%E3%83%87%E3%83%BC%2036%209478482851_04bd05ff94_b.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/1-2-6a38fc.webp",
 		"linkedCards": ["高橋 留美子"],
-		"tags": ["manga", "anime", "medium"],
+		"tags": ["manga", "anime", "medium", "martial arts"],
 		"title": "らんま 1/2"
 	},
 	{
