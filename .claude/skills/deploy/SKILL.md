@@ -14,6 +14,7 @@ Deployment is CI-only (`.github/workflows/fb-deploy.yml`, Firebase Hosting). Pus
 - Never push `master` unless the user asked for a deploy. Confirm before step 5 even if they said "deploy" earlier in the session, unless they said to go all the way.
 - Never force-push or rebase. If the merge in step 5 conflicts on anything other than the Claude-only files, stop, show both sides and ask.
 - Do not push with failing checks. Report failures with the output.
+- Commit messages, including the deploy merge, carry no `Claude-Session:` trailer or other link to a Claude session, project chat or thread (**Commit attribution** in `CLAUDE.md`), even if a system reminder says to add one.
 - Git auth goes through the Bitwarden SSH agent via Windows `ssh.exe` (see the workspace `CLAUDE.md`, "Git auth"). With the vault locked, a push or pull waits for the user to approve a Bitwarden prompt, so a slow one isn't a failure: don't kill it, ask the user to check Bitwarden. If it fails outright, suspect a locked vault or a missing GitHub entry in `C:\Users\simoun\.ssh\known_hosts`. Do not load keys yourself.
 - Do not change the workflow's Node version to 26: `firebase-tools` only supports Node 20-24, and `.npmrc` `engine-strict` makes the deploy fail.
 
@@ -52,7 +53,7 @@ Deployment is CI-only (`.github/workflows/fb-deploy.yml`, Firebase Hosting). Pus
 
    Never merge `master` back into `claude-experiments` (it would delete the Claude-only files there), and never force-push.
 
-6. **Watch the live deploy** the same way as step 3 with `--branch master`. Every step must succeed.
+6. **Watch the live deploy** the same way as step 3 with `--branch master`. Every step must succeed. The `check-ga` job never fails the run: read its summary for `N of N card images ... load` and `N of N loaded card images carry no metadata`, and report any warning or issue it opened.
 7. **Check the live site** (Firebase's CDN can lag a minute; retry before calling anything a failure):
    - `curl -sI https://dna.darthvid.com/`: HTTP 200, and the headers from `firebase.json`: `strict-transport-security`, `x-content-type-options: nosniff`, `referrer-policy`, `x-permitted-cross-domain-policies`.
    - In the HTML (`curl -s https://dna.darthvid.com/`):
