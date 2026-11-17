@@ -91,7 +91,7 @@
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/1988.10.04%20Dragon%20Ball%20195%20title%20WSJ%201988-45%201032.png",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/z-a2b646.webp",
 		"linkedCards": ["鳥山 明"],
-		"tags": ["manga", "anime", "medium", "draw", "panel flow"],
+		"tags": ["manga", "anime", "medium", "art style", "panel flow"],
 		"title": "ドラゴンボールZ"
 	},
 	{
@@ -229,7 +229,7 @@
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/2011.07.08%20the-idolm-ster-fa8e42.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/the-idolm-ster-fa8e42.webp",
 		"linkedCards": ["錦織 敦史"],
-		"tags": ["anime", "draw", "character design"],
+		"tags": ["anime", "art style", "character design"],
 		"title": "The iDOLM@STER"
 	},
 	{
@@ -253,7 +253,7 @@
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/2013.10.04%20%E3%80%8C%E3%82%AD%E3%83%AB%E3%83%A9%E3%82%AD%E3%83%AB%E3%80%8D%20100051.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/card-57f94b.webp",
 		"linkedCards": ["TRIGGER", "すしお", "今石 洋之", "永井 豪"],
-		"tags": ["anime", "film appreciation", "medium", "draw", "expressionist", "character design"],
+		"tags": ["anime", "film appreciation", "medium", "art style", "expressionist", "character design"],
 		"title": "キルラキル"
 	},
 	{
