@@ -13,14 +13,14 @@ Title (must be unique, the data test enforces it), date (the release date or fir
 
 ## Add (or replace an image)
 
-1. **Original.** Download or copy it into a new, empty scratch folder (it's untrusted data). Check the real format from its bytes (`file`), not the URL, and keep that format and extension.
+1. **Original.** Download or copy it into a new, empty scratch folder (it's untrusted data). Check the real format from its bytes (`file`), not the URL, and keep that format and extension. Then clean it (**Image hygiene** in `CLAUDE.md`): `python3 -I .claude/tools/img-clean.py --strip <file>` (rotate first if it has an EXIF orientation), before hashing it for the name.
 2. **Names.**
    - Full-size: `ditim/full/<YYYY.MM.DD> <short name>.<ext>`, using the card's start date (`YYYY.MM` or `YYYY` if that's all the date has), like the existing keys.
    - Thumbnail: `ditim/thumbs/<slug>-<hex6>.webp`. `slug` is the title lowercased with runs of non-`[a-z0-9]` turned into `-` (`card` if nothing is left, e.g. a Japanese-only title); `hex6` is the first 6 hex digits of the original's SHA-256.
    - Both are cached `immutable` for a year, so a **replaced** image must get a new key (new hash, or a changed name), never an overwrite.
 3. **Thumbnail.** sharp, in the scratch folder (`npm i --prefix <scratch> sharp`; don't add it to the repo): `resize(480, 640, { fit: 'cover' })`, `.webp({ quality: 68 })`. Look at the result: if `cover` cropped off the subject, tell the user and offer a `position` (e.g. `'top'`).
 4. **deck.json.** Add the entry with `imgURL` and `thumbURL` as bucket-subdomain URLs (copy the host from an existing card), the key percent-encoded (spaces as `%20`, non-ASCII as UTF-8 `%XX`, like the existing entries). Run `npx prettier --write src/lib/data/deck.json`.
-5. **Upload package** in `/mnt/project-files/dna-card-<slug>/` (`<slug>` from step 2), plus a `.zip` of that folder, since CloudShell's "Upload file" takes one file:
+5. **Upload package** (run `img-clean.py --check` on both images before zipping, and on the files unzipped from the `.zip` after) in `/mnt/project-files/dna-card-<slug>/` (`<slug>` from step 2), plus a `.zip` of that folder, since CloudShell's "Upload file" takes one file:
    - the two image files;
    - `upload.sh`, modeled on `dna-thumbs/upload.sh` in the project files: `set -euo pipefail`; one `aws s3 cp` per file with its exact `--content-type` (`image/jpeg`, `image/png`, `image/webp`, `image/svg+xml`, ...) and `--cache-control 'public, max-age=31536000, immutable'`; then a `curl -sS -o /dev/null -w '%{http_code} %{content_type}\n' -H 'Referer: https://dna.darthvid.com/'` of both new URLs (expect `200 image/...`).
    - The steps you give the user: upload the zip, `unzip dna-card-<slug>.zip && bash dna-card-<slug>/upload.sh`, then **always** the cleanup: "run `ls -la ~` first, then `rm -rf ~/dna-card-<slug> ~/dna-card-<slug>.zip`". CloudShell's home persists (1 GB per region).
