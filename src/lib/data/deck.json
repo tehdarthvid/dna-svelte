@@ -254,7 +254,14 @@
 		"imgURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/full/2013.10.04%20%E3%80%8C%E3%82%AD%E3%83%AB%E3%83%A9%E3%82%AD%E3%83%AB%E3%80%8D%20100051.jpg",
 		"thumbURL": "https://sk2q169cx9pfoawet3et.s3-ap-northeast-1.amazonaws.com/ditim/thumbs/card-57f94b.webp",
 		"linkedCards": ["TRIGGER", "すしお", "今石 洋之", "永井 豪"],
-		"tags": ["anime", "film appreciation", "medium", "art style", "expressionist", "character design"],
+		"tags": [
+			"anime",
+			"film appreciation",
+			"medium",
+			"art style",
+			"expressionist",
+			"character design"
+		],
 		"title": "キルラキル"
 	},
 	{
