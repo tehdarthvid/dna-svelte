@@ -1,11 +1,11 @@
 ---
 name: card
-description: Add, replace or remove a card on dna.darthvid.com. Makes the full-size image and 480x640 WebP thumbnail for the S3 bucket, a CloudShell upload script (with a cleanup command) for the user to run, and the deck.json change. Use when the user asks to add, change, swap the image of, or remove a dna card.
+description: Add, replace or remove a card on dna.darthvid.com. Makes the full-size image and 480x640 WebP thumbnail for the S3 bucket, an upload (from Uzuki with `scripts/s3-upload.sh`, or a CloudShell script as fallback), and the deck.json change. Use when the user asks to add, change, swap the image of, or remove a dna card.
 ---
 
 # Add or remove a dna card
 
-Read the **Full-size images** and **Thumbnails** bullets in `CLAUDE.md` first: they are the recipe (S3 layout, formats, headers). This skill is the order of work around them. Card images are never committed; they live only in the S3 bucket, and Claude has no AWS credentials, so the user uploads them from AWS CloudShell.
+Read the **Full-size images** and **Thumbnails** bullets in `CLAUDE.md` first: they are the recipe (S3 layout, formats, headers). This skill is the order of work around them. Card images are never committed; they live only in the S3 bucket. Claude has no AWS credentials in cloud threads: the preferred upload runs on Uzuki (Remote Control, which the user starts), the fallback is the user's AWS CloudShell.
 
 ## Inputs to get from the user
 
@@ -41,12 +41,13 @@ Whatever the source, the image is cleaned before upload (step 1 below), and it i
    - Both are cached `immutable` for a year, so a **replaced** image must get a new key (new hash, or a changed name), never an overwrite.
 3. **Thumbnail.** sharp, in the scratch folder (`npm i --prefix <scratch> sharp`; don't add it to the repo): `resize(480, 640, { fit: 'cover' })`, `.webp({ quality: 68 })`. Look at the result: if `cover` cropped off the subject, tell the user and offer a `position` (e.g. `'top'`).
 4. **deck.json.** Add the entry with `imgURL` and `thumbURL` as bucket-subdomain URLs (copy the host from an existing card), the key percent-encoded (spaces as `%20`, non-ASCII as UTF-8 `%XX`, like the existing entries). Run `npx prettier --write src/lib/data/deck.json`.
-5. **Upload package** (run `img-clean.py --check` on both images before zipping, and on the files unzipped from the `.zip` after) in `/mnt/project-files/dna-card-<slug>/` (`<slug>` from step 2), plus a `.zip` of that folder, since CloudShell's "Upload file" takes one file:
+5. **Upload.** Preferred, when Uzuki is reachable over Remote Control (ask the user to start it if needed; never propose auto-start): copy the two cleaned files to a scratch folder on Uzuki (named exactly as the S3 key basenames from step 2), then there run `scripts/s3-upload.sh full <full file>` and `scripts/s3-upload.sh thumbs <thumb file>` as a dry run, show the plan, then again with `--yes` as the first argument. Expect `200 image/...` per file. The profile is create-only, so an existing key fails with 412: pick a new name, never overwrite. Nothing to clean up in CloudShell. If Uzuki isn't available, use the CloudShell package below.
+   **CloudShell fallback package** (run `img-clean.py --check` on both images before zipping, and on the files unzipped from the `.zip` after) in `/mnt/project-files/dna-card-<slug>/` (`<slug>` from step 2), plus a `.zip` of that folder, since CloudShell's "Upload file" takes one file:
    - the two image files;
    - `upload.sh`, modeled on `dna-thumbs/upload.sh` in the project files: `set -euo pipefail`; one `aws s3 cp` per file with its exact `--content-type` (`image/jpeg`, `image/png`, `image/webp`, `image/svg+xml`, ...) and `--cache-control 'public, max-age=31536000, immutable'`; then a `curl -sS -o /dev/null -w '%{http_code} %{content_type}\n' -H 'Referer: https://dna.darthvid.com/'` of both new URLs (expect `200 image/...`).
    - The steps you give the user: upload the zip, `unzip dna-card-<slug>.zip && bash dna-card-<slug>/upload.sh`, then **always** the cleanup: "run `ls -la ~` first, then `rm -rf ~/dna-card-<slug> ~/dna-card-<slug>.zip`". CloudShell's home persists (1 GB per region).
 6. **Checks:** `npm run lint`, `npm run check`, `npm test`, `npm run test:e2e`. None of them load the S3 images (localhost fails the bucket's Referer rule), so look at the thumbnail yourself and say that the live load is still unchecked.
-7. **Commit and push `claude-experiments`** (this deploys only the preview channel). Commit messages carry no `Claude-Session:` trailer or other link to a Claude session or project (**Commit attribution** in `CLAUDE.md`); `git pull` first, since other threads may have pushed. Don't deploy: going live goes through the `deploy` skill with the user's approval, and **only after they've run `upload.sh`**, or the post-deploy image check opens a `Card images failing on live site` issue.
+7. **Commit and push `claude-experiments`** (this deploys only the preview channel). Commit messages carry no `Claude-Session:` trailer or other link to a Claude session or project (**Commit attribution** in `CLAUDE.md`); `git pull` first, since other threads may have pushed. Don't deploy: going live goes through the `deploy` skill with the user's approval, and **only after the images are uploaded** (the script's `200` lines, or the user's `upload.sh`), or the post-deploy image check opens a `Card images failing on live site` issue.
 
 ## Remove
 
